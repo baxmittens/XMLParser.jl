@@ -1,0 +1,8 @@
+name = "XMLParser"
+version = "0.0.1"
+
+[deps]
+
+
+[compat]
+julia = "1"
