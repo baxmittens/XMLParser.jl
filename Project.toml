@@ -1,6 +1,6 @@
 name = "XMLParser"
 uuid = "b09a1ce3-015a-45b4-89ae-f27efbd2c76d"
-version = "0.0.1"
+version = "0.0.2"
 
 [deps]
 
