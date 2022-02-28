@@ -1,9 +1,9 @@
 
-mutable struct IOState3 #Top Level Hack
+mutable struct IOState
 	file::String
 	f::IOStream
 	tokens::Vector{String}
-	function IOState3(file)
+	function IOState(file)
 		return new(file,open(file),String[])
 	end
 end
@@ -98,7 +98,7 @@ function readXMLTag(token,_empty=false)
 end
 
 function readXMLInclude(file)
-	state = IOState3(file)
+	state = IOState(file)
 	elements = Vector{XMLElement}()
 	while hastokens(state)
 		element = readXMLElement(state)
@@ -189,7 +189,7 @@ function writeXMLElement(f,el::XMLElement)
 end
 
 function Base.read(::Type{XMLElement}, file)
-	state = IOState3(file)
+	state = IOState(file)
 	element = readXMLElement(state)
 	close(state.f)
 	return element

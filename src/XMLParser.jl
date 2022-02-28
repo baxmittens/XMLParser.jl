@@ -1,3 +1,5 @@
+module XMLParser
+
 mutable struct XMLAttribute
 	key::String
 	val::String
@@ -25,3 +27,5 @@ end
 
 include(joinpath(".","XMLParser","io.jl"))
 include(joinpath(".","XMLParser","utils.jl"))
+
+end #module XMLParser
