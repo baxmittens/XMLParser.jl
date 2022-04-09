@@ -1,2 +1,2 @@
 # XMLParser
-A leightweight XML parser in the julia language
+A lightweight XML parser in the julia language
