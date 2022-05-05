@@ -9,5 +9,9 @@ bla bla
 ## Function Documentation
 
 ```@docs
+XMLAttribute
+XMLTag
+XMLEmptyTag
+XMLElement
 read
 ```
