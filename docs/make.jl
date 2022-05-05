@@ -8,6 +8,5 @@ makedocs(
 	]
 	)
 deploydocs(
-    repo = "github.com/baxmittens/XMLParser.jl.git",
-    target = "build"
+    repo = "github.com/baxmittens/XMLParser.jl.git"
 )
