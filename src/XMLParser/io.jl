@@ -188,6 +188,9 @@ function writeXMLElement(f,el::XMLElement)
 	el.tag.name[1] != '?' ? writeTag(f,el.tag,true) : nothing
 end
 
+"""
+read
+"""
 function Base.read(::Type{XMLElement}, file)
 	state = IOState(file)
 	element = readXMLElement(state)
