@@ -18,6 +18,9 @@ mutable struct XMLEmptyTag <: AbstractXMLTag
 	attributes::Vector{XMLAttribute}
 end
 
+"""
+    XMLElement(tag,content)
+"""	
 mutable struct XMLElement
 	tag::AbstractXMLTag
 	content::Vector{Any}
