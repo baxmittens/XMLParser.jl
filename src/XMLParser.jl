@@ -1,11 +1,22 @@
 module XMLParser
 
+"""
+    XMLAttribute(key::String,val::String)
+
+    Creates a XML attribute
+"""	
 mutable struct XMLAttribute
 	key::String
 	val::String
 end
 
 abstract type AbstractXMLTag end
+
+"""
+    XMLTag(name::String,attributes::Vector{XMLAttribute})
+
+    Creates a XML tag
+"""	
 mutable struct XMLTag <: AbstractXMLTag
 	name::String
 	attributes::Vector{XMLAttribute}
@@ -14,7 +25,9 @@ function XMLTag(name::String)
 	return XMLTag(name,Vector{XMLAttribute}())
 end
 """
-    XMLEmptyTag(name,attributes)
+    XMLEmptyTag(name::String,attributes::Vector{XMLAttribute})
+
+    Creates a XML emptytag
 """	
 mutable struct XMLEmptyTag <: AbstractXMLTag
 	name::String
@@ -22,7 +35,9 @@ mutable struct XMLEmptyTag <: AbstractXMLTag
 end
 
 """
-    XMLElement(tag,content)
+    XMLElement(tag::AbstractXMLTag,content::Vector{Any})
+
+    Creates a XML element
 """	
 mutable struct XMLElement
 	tag::AbstractXMLTag
