@@ -13,6 +13,9 @@ end
 function XMLTag(name::String)
 	return XMLTag(name,Vector{XMLAttribute}())
 end
+"""
+    XMLEmptyTag(name,attributes)
+"""	
 mutable struct XMLEmptyTag <: AbstractXMLTag
 	name::String
 	attributes::Vector{XMLAttribute}
