@@ -2,7 +2,7 @@ push!(LOAD_PATH,"../src/")
 using Documenter, XMLParser
 makedocs(
 	sitename = "XMLParser.jl",
-	#modules = [XMLParser],
+	modules = [XMLParser],
 	pages = [
 		"Home" => "index.md"
 	]
