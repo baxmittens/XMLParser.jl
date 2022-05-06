@@ -1,11 +1,15 @@
 # XMLParser.jl
 A lightweight XML parser which is purely written in Julia.
 
-For extensive use of XML features, consider using one of the following XML-libraries: [LightXML.jl](https://github.com/JuliaIO/LightXML.jl), [EzXML.jl](https://github.com/JuliaIO/EzXML.jl).
-
 See the [documentation](https://baxmittens.github.io/XMLParser.jl/dev/):
 
 [![][docs-dev-img]][docs-dev-url]
+
+
+For extensive use of XML features, consider using one of the following XML-libraries: [LightXML.jl](https://github.com/JuliaIO/LightXML.jl), [EzXML.jl](https://github.com/JuliaIO/EzXML.jl).
+
+
+There exist another XML library [XML.jl](https://github.com/joshday/XML.jl) purely written in Julia.
 
 ### Unsupported features
 
