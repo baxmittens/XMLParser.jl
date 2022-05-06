@@ -178,7 +178,7 @@ end
 """
 `writeXMLElement(f::IOStream, el::XMLElement)`
 
-Writes a `el::XMLElement` to `f::IOStream`.
+Writes a `XMLElement` to an `IOStream`.
 """
 function writeXMLElement(f::IOStream, el::XMLElement)
 	writeTag(f,el.tag)
