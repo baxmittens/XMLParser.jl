@@ -6,7 +6,7 @@ For extensive use of XML features, consider using one of the following XML-libra
 
 ### Unsupported features
 
--- It is not allowed to use one of the following characters in XML content: `<`,`>`
+* It is not allowed to use one of the following characters in XML content: `<`,`>`
 
 There are probably many more XML features that are not supported at the moment.
 
@@ -23,6 +23,20 @@ XMLElement
 ```
 
 ## Functions
+
+### Utils
+
+```@docs
+getElements!
+getElements
+getChildrenbyTagName!
+getChildrenbyTagName
+hasAttributekey
+getAttribute
+setAttribute
+```
+
+### IO-Functions
 
 ```@docs
 read(::Type{XMLElement}, ::String)

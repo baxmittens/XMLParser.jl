@@ -2,6 +2,11 @@ function checkTagName(xmlel::XMLElement,tagname::String)
 	return isequal(xmlel.tag.name,tagname)
 end
 
+"""
+`getElements!(ret::Vector{XMLElement},xmlel::XMLElement,tagname::String)`
+
+Pushes all `XMLElement`s that match the `tagname` to `ret`. 
+"""	
 function getElements!(ret::Vector{XMLElement},xmlel::XMLElement,tagname::String)
 	for con in xmlel.content
 		if typeof(con)==XMLElement
@@ -15,12 +20,22 @@ function getElements!(ret::Vector{XMLElement},xmlel::XMLElement,tagname::String)
 	return nothing
 end
 
+"""
+`getElements(xmlel::XMLElement,tagname::String)`
+
+Gets all `XMLElement`s that match the `tagname` and returns a `Vector{XMLElement}`. 
+"""	
 function getElements(xmlel::XMLElement,tagname::String)
 	ret = Vector{XMLElement}()
 	getElements!(ret,xmlel,tagname)
 	return ret
 end
 
+"""
+`getChildrenbyTagName!(ret::Vector{XMLElement},xmlel::XMLElement,tagname::String)`
+
+Pushes all `XMLElement`s that are direct children of `xmlel` and match the `tagname` to `ret`. 
+"""	
 function getChildrenbyTagName!(ret::Vector{XMLElement},xmlel::XMLElement,tagname::String)
 	for con in xmlel.content
 		if typeof(con)==XMLElement
@@ -32,6 +47,12 @@ function getChildrenbyTagName!(ret::Vector{XMLElement},xmlel::XMLElement,tagname
 	return nothing
 end
 
+"""
+`getChildrenbyTagName(xmlel::XMLElement,tagname::String)`
+
+Gets all `XMLElement`s that are direct children of `xmlel` and match the `tagname`.
+Return a `Vector{XMLElement}`. 
+"""	
 function getChildrenbyTagName(xmlel::XMLElement,tagname::String)
 	ret = Vector{XMLElement}()
 	getChildrenbyTagName!(ret,xmlel,tagname)
@@ -69,6 +90,11 @@ end
 #	return ret
 #end
 
+"""
+`hasAttributekey(el::XMLElement,key::String))`
+
+Return true if `el` has a attribute with keyname `key`. Returns false otherwise. 
+"""	
 function hasAttributekey(el::XMLElement,key::String)
 	for attribute in el.tag.attributes
 		if isequal(attribute.key,key)
@@ -78,6 +104,11 @@ function hasAttributekey(el::XMLElement,key::String)
 	return false
 end
 
+"""
+`getAttribute(el::XMLElement,key::String)`
+
+Return attribute value if `el` has a attribute with keyname `key`. Returns emptystring otherwise. 
+"""	
 function getAttribute(el::XMLElement,key::String)
 	for attribute in el.tag.attributes
 		if isequal(attribute.key,key)
@@ -87,6 +118,12 @@ function getAttribute(el::XMLElement,key::String)
 	return ""
 end
 
+"""
+`setAttribute(el::XMLElement,key::String,val)`
+
+Sets attribute value `val` to XML attribute `key` of `XMLElement` `el`. 
+Returns an `error("Attribute not found")` if `key` is not found. Returns `nothing` otherwise.
+"""	
 function setAttribute(el::XMLElement,key::String,val)
 	for attribute in el.tag.attributes
 		if isequal(attribute.key,key)
