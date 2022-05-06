@@ -3,11 +3,7 @@ A lightweight XML parser which is purely written in Julia.
 
 For extensive use of XML features, consider using one of the following XML-libraries: [LightXML.jl](https://github.com/JuliaIO/LightXML.jl), [EzXML.jl](https://github.com/JuliaIO/EzXML.jl).
 
-
-| **Documentation**                                                               |
-|:-------------------------------------------------------------------------------:|
-| [![][docs-dev-img]][docs-dev-url] |
-
+See the documentation: [![][docs-dev-img]][docs-dev-url]
 
 ### Unsupported features
 
