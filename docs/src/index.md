@@ -17,3 +17,8 @@ XMLElement
 ```
 
 ## Functions
+
+```@docs
+read(::Type{XMLElement}, ::String)
+writeXMLElement
+```

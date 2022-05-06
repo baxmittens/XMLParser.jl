@@ -147,13 +147,13 @@ function readXMLElement(state)
 	return element
 end
 
-function writeAttribute(f,attr)
+function writeAttribute(f::IOStream,attr)
 	key,val = attr.key,attr.val 
 	write(f," $key=$val")
 end
 
 
-function writeTag(f,tag::XMLTag,_sec=false)
+function writeTag(f::IOStream,tag::XMLTag,_sec=false)
 	if !_sec
 		write(f,"<$(tag.name)")
 		for attr in tag.attributes
@@ -165,7 +165,7 @@ function writeTag(f,tag::XMLTag,_sec=false)
 	end
 end
 
-function writeTag(f,tag::XMLEmptyTag,_sec=false)
+function writeTag(f::IOStream,tag::XMLEmptyTag,_sec=false)
 	if !_sec
 		write(f,"<$(tag.name)")
 		for attr in tag.attributes
@@ -175,7 +175,12 @@ function writeTag(f,tag::XMLEmptyTag,_sec=false)
 	end
 end
 
-function writeXMLElement(f,el::XMLElement)
+"""
+`writeXMLElement(f::IOStream, el::XMLElement)`
+
+Writes a `el::XMLElement` to `f::IOStream`.
+"""
+function writeXMLElement(f::IOStream, el::XMLElement)
 	writeTag(f,el.tag)
 	for con in el.content
 		if typeof(con) == XMLElement
@@ -189,9 +194,12 @@ function writeXMLElement(f,el::XMLElement)
 end
 
 """
-read
+`Base.read(::Type{XMLElement}, file::String)`
+
+Reads a XML file in location `file`.
+Returns a `XMLElement`.
 """
-function Base.read(::Type{XMLElement}, file)
+function Base.read(::Type{XMLElement}, file::String)
 	state = IOState(file)
 	element = readXMLElement(state)
 	close(state.f)
