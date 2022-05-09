@@ -11,7 +11,7 @@ For extensive use of XML features, consider using one of the following XML-libra
 There exist another XML library [XML.jl](https://github.com/joshday/XML.jl) purely written in Julia.
 
 
-#Install
+## Install
 
 ```julia
 import Pkg
