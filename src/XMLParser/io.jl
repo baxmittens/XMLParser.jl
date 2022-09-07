@@ -119,11 +119,17 @@ function readXMLElement(state)
 			tag = readXMLTag(token)
 			if !isdefined(element,:tag)
 				element.tag = tag
-			elseif element.tag.name == replace(tag.name,"/"=>"")
+			elseif tag.name[1]=='/' && element.tag.name == replace(tag.name,"/"=>"")
 				return element
 			else
 				pushfirst!(state.tokens,token)
-				push!(element.content,readXMLElement(state))
+				if tag.name == "include" && tag.attributes[1].key == "file"
+					file = replace(tag.attributes[1].val,"\""=>"")
+					elements = readXMLInclude(joinpath(split(state.file,"/")[1:end-1]...,file)) #only linux
+					append!(element.content,elements)
+				else
+					push!(element.content,readXMLElement(state))
+				end
 			end
 		elseif isemptytag(token)
 			@assert isdefined(element,:tag) "Empty-tag cannot be root"
