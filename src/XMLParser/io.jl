@@ -159,7 +159,8 @@ function writeAttribute(f::IOStream,attr)
 end
 
 
-function writeTag(f::IOStream,tag::XMLTag,_sec=false)
+function writeTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
+	write(f,repeat("\t",tab))
 	if !_sec
 		write(f,"<$(tag.name)")
 		for attr in tag.attributes
@@ -171,8 +172,9 @@ function writeTag(f::IOStream,tag::XMLTag,_sec=false)
 	end
 end
 
-function writeTag(f::IOStream,tag::XMLEmptyTag,_sec=false)
+function writeTag(f::IOStream,tag::XMLEmptyTag,tab::Int=0,_sec=false)
 	if !_sec
+		write(f,repeat("\t",tab))
 		write(f,"<$(tag.name)")
 		for attr in tag.attributes
 			writeAttribute(f,attr)
@@ -186,17 +188,18 @@ end
 
 Writes a `XMLElement` to an `IOStream`.
 """
-function writeXMLElement(f::IOStream, el::XMLElement)
-	writeTag(f,el.tag)
+function writeXMLElement(f::IOStream, el::XMLElement,tab::Int=0)
+	writeTag(f,el.tag,tab)
 	for con in el.content
 		if typeof(con) == XMLElement
-			writeXMLElement(f,con)
+			writeXMLElement(f,con,tab+1)
 		else
+			write(f,repeat("\t",tab+1))
 			write(f,con)
 			write(f,"\n")
 		end
 	end
-	el.tag.name[1] != '?' ? writeTag(f,el.tag,true) : nothing
+	el.tag.name[1] != '?' ? writeTag(f,el.tag,tab,true) : nothing
 end
 
 """
@@ -210,4 +213,43 @@ function Base.read(::Type{XMLElement}, file::String)
 	element = readXMLElement(state)
 	close(state.f)
 	return element
+end
+
+function Base.string(attr::XMLAttribute)
+	key,val = attr.key,attr.val 
+	return "$key=$val"
+end
+
+function Base.string(tag::XMLEmptyTag, tab::Int=0)
+	str = repeat("\t",tab)*"<$(tag.name)"
+	for i in 1:length(tag.attributes)-1
+		str *= " "*string(tag.attributes[i])*","
+	end
+	str *= " "*string(tag.attributes[end])*"/>"
+	return str
+end
+
+function Base.string(tag::XMLTag,tab::Int=0)
+	str = repeat("\t",tab)*"<$(tag.name)"
+	if length(tag.attributes) > 0
+		for i in 1:length(tag.attributes)-1
+			str *= " "*string(tag.attributes[i])*","
+		end
+		str *= " "*string(tag.attributes[end])
+	end
+	str *= ">"
+	return str
+end
+
+function Base.string(el::XMLElement, tab::Int=0)
+	str = string(el.tag,tab)
+	for con in el.content
+		if typeof(con) == XMLElement
+			str *= "\n"*string(con,tab+1)
+		else
+			str *= "\n"*repeat("\t",tab+1)*string(con)
+		end
+	end
+	str *= el.tag.name[1] != '?' ? "\n"*string(el.tag,tab) : ""
+	return str
 end
