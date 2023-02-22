@@ -56,6 +56,6 @@ el3 = read(XMLElement, filename)
 
 b = XML2Julia(el3)
 
-@test typeof(b) == ntmp
+@test typeof(b) == ntmp{Float64, Int64}
 
 end
