@@ -215,6 +215,12 @@ function Base.read(::Type{XMLElement}, file::String)
 	return element
 end
 
+function writeXML(el::XMLElement, filename::String)
+	f = open(filename,"w")
+	writeXMLElement(f,el)
+	close(f)
+end
+
 function Base.string(attr::XMLAttribute)
 	key,val = attr.key,attr.val 
 	return "$key=$val"
