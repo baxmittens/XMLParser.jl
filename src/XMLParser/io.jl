@@ -191,7 +191,7 @@ Writes a `XMLElement` to an `IOStream`.
 function writeXMLElement(f::IOStream, el::XMLElement,tab::Int=0)
 	writeTag(f,el.tag,tab)
 	for con in el.content
-		if typeof(con) == XMLElement
+		if typeof(con) == XMLElement || typeof(con) == XMLEmptyElement
 			writeXMLElement(f,con,tab+1)
 		else
 			write(f,repeat("\t",tab+1))
