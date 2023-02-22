@@ -164,14 +164,14 @@ end
 
 function writeAttribute(f::IOStream,attr)
 	key,val = attr.key,attr.val 
-	write(f," $key=\"$val\"")
+	write(f," $key=\"$val\"\n")
 end
 
 
 function writeTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
 	write(f,repeat("\t",tab))
 	if !_sec
-		write(f,"<$(tag.name)")
+		write(f,"<$(tag.name)\n")
 		for attr in tag.attributes
 			writeAttribute(f,attr)
 		end
