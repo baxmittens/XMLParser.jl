@@ -168,7 +168,7 @@ function Base.deepcopy(attr::XMLAttribute)
 	return XMLAttribute(deepcopy(attr.key),deepcopy(attr.val))
 end
 
-function Base.deepcopy(tag::Tag) where {Tag<:AbstractXMLTag}
+function Base.deepcopy(tag::XMLTag)
 	return Tag(deepcopy(tag.name), map(deepcopy,tag.attributes))
 end
 

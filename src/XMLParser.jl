@@ -49,7 +49,7 @@ end
 
 Creates a XML element
 
-`XMLElement(tag::AbstractXMLTag, content::Vector{Any})`
+`XMLElement(tag::XMLTag, content::Vector{Any})`
 """	
 mutable struct XMLEmptyElement <: AbstractXMLElement
 	tag::XMLTag
