@@ -57,6 +57,7 @@ end
 
 include(joinpath(".","XMLParser","io.jl"))
 include(joinpath(".","XMLParser","utils.jl"))
+include(joinpath(".","XMLParser","julia2xml.jl"))
 
 export XMLAttribute,XMLTag,XMLEmptyTag,XMLElement,IOState,getElements!,getElements,getChildrenbyTagName!,getChildrenbyTagName,copyElementWoContent,hasAttributekey,getAttribute,setAttribute,readXMLElement,writeXMLElement
 
