@@ -30,7 +30,7 @@ end
 Gets all `XMLElement`s that match the `tagname` and returns a `Vector{XMLElement}`. 
 """	
 function getElements(xmlel::XMLElement,tagname::String)
-	ret = Vector{XMLElement}()
+	ret = Vector{AbstractXMLElement}()
 	getElements!(ret,xmlel,tagname)
 	return ret
 end
