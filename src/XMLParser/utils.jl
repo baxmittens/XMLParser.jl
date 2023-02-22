@@ -134,8 +134,8 @@ function setAttribute(el::XMLElement,key::String,val)
 	return error("Attribute not found")
 end
 
-Base.show(io::IO,tag::Union{XMLTag,XMLEmptyTag}) = print(io,"<"*tag.name*">")
-function Base.show(io::IO,tag::Union{XMLTag,XMLEmptyTag},depth)
+Base.show(io::IO,tag::XMLTag) = print(io,"<"*tag.name*">")
+function Base.show(io::IO,tag::XMLTag,depth)
 	#foreach(x->print("  "),1:depth)
 	print(io,"<"*tag.name*">")
 end

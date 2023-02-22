@@ -172,16 +172,16 @@ function writeTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
 	end
 end
 
-function writeTag(f::IOStream,tag::XMLEmptyTag,tab::Int=0,_sec=false)
-	if !_sec
-		write(f,repeat("\t",tab))
-		write(f,"<$(tag.name)")
-		for attr in tag.attributes
-			writeAttribute(f,attr)
-		end
-		write(f,"/>\n")
-	end
-end
+#function writeTag(f::IOStream,tag::XMLEmptyTag,tab::Int=0,_sec=false)
+#	if !_sec
+#		write(f,repeat("\t",tab))
+#		write(f,"<$(tag.name)")
+#		for attr in tag.attributes
+#			writeAttribute(f,attr)
+#		end
+#		write(f,"/>\n")
+#	end
+#end
 
 """
 `writeXMLElement(f::IOStream, el::XMLElement)`
@@ -226,14 +226,14 @@ function Base.string(attr::XMLAttribute)
 	return "$key=$val"
 end
 
-function Base.string(tag::XMLEmptyTag, tab::Int=0)
-	str = repeat("\t",tab)*"<$(tag.name)"
-	for i in 1:length(tag.attributes)-1
-		str *= " "*string(tag.attributes[i])*","
-	end
-	str *= " "*string(tag.attributes[end])*"/>"
-	return str
-end
+#function Base.string(tag::XMLEmptyTag, tab::Int=0)
+#	str = repeat("\t",tab)*"<$(tag.name)"
+#	for i in 1:length(tag.attributes)-1
+#		str *= " "*string(tag.attributes[i])*","
+#	end
+#	str *= " "*string(tag.attributes[end])*"/>"
+#	return str
+#end
 
 function Base.string(tag::XMLTag,tab::Int=0)
 	str = repeat("\t",tab)*"<$(tag.name)"
