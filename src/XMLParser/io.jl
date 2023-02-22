@@ -262,12 +262,5 @@ end
 
 function Base.string(el::XMLEmptyElement, tab::Int=0)
 	str = string(el.tag,tab)
-	for con in el.content
-		if typeof(con) == XMLElement || typeof(con) == XMLEmptyElement
-			str *= "\n"*string(con,tab+1)
-		else
-			str *= "\n"*repeat("\t",tab+1)*string(con)
-		end
-	end
 	return str
 end
