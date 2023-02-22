@@ -38,12 +38,7 @@ obj = tmp(1.0,1)
 obj2 = ntmp(1.0,1,tmp(2.0,1),tmp(1,1.0),tmp2(3,3))
 
 el = convert(XMLElement, obj)
-println(el)
-println(el.tag.attributes)
-
 el2 = convert(XMLElement, obj2)
-println(el2)
-println(el2.tag.attributes)
 
 filename = "./tst.xml"
 f = open(filename,"w")
