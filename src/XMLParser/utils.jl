@@ -177,11 +177,11 @@ function Base.deepcopy(el::XMLElement)
 	return XMLElement(deepcopy(el.tag), map(deepcopy,el.content))
 end
 
-function Base.convert(::Type{XMLEmptyElement} el::XMLElement)
+function Base.convert(::Type{XMLEmptyElement}, el::XMLElement)
 	@assert isempty(el.content)
 	return XMLEmptyElement(el.tag)
 end
 
-function Base.convert(::Type{XMLElement} el::XMLEmptyElement)
+function Base.convert(::Type{XMLElement}, el::XMLEmptyElement)
 	return XMLElement(el.tag,Any[])
 end
