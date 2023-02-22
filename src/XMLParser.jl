@@ -9,7 +9,7 @@ Creates a XML attribute key-value-pair
 """	
 mutable struct XMLAttribute
 	key::String
-	val::Any
+	val::String
 end
 
 abstract type AbstractXMLTag end
