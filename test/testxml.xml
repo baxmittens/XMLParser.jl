@@ -36,4 +36,5 @@
     <Input>Test Input</Input>
     <Output>10</Output>
   </Test>
+  <Test TestId="0006" TestType="GUI"/>
 </Tests>
