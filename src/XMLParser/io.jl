@@ -188,7 +188,7 @@ end
 
 Writes a `XMLElement` to an `IOStream`.
 """
-function writeXMLElement(f::IOStream, el::XMLElement,tab::Int=0)
+function writeXMLElement(f::IOStream, el::AbstractXMLElement,tab::Int=0)
 	writeTag(f,el.tag,tab)
 	for con in el.content
 		if typeof(con) == XMLElement
@@ -215,7 +215,7 @@ function Base.read(::Type{XMLElement}, file::String)
 	return element
 end
 
-function writeXML(el::XMLElement, filename::String)
+function writeXML(el::AbstractXMLElement, filename::String)
 	f = open(filename,"w")
 	writeXMLElement(f,el)
 	close(f)
@@ -250,12 +250,24 @@ end
 function Base.string(el::XMLElement, tab::Int=0)
 	str = string(el.tag,tab)
 	for con in el.content
-		if typeof(con) == XMLElement
+		if typeof(con) == XMLElement || typeof(con) == XMLEmptyElement
 			str *= "\n"*string(con,tab+1)
 		else
 			str *= "\n"*repeat("\t",tab+1)*string(con)
 		end
 	end
 	str *= el.tag.name[1] != '?' ? "\n"*string(el.tag,tab) : ""
+	return str
+end
+
+function Base.string(el::XMLEmptyElement, tab::Int=0)
+	str = string(el.tag,tab)
+	for con in el.content
+		if typeof(con) == XMLElement || typeof(con) == XMLEmptyElement
+			str *= "\n"*string(con,tab+1)
+		else
+			str *= "\n"*repeat("\t",tab+1)*string(con)
+		end
+	end
 	return str
 end
