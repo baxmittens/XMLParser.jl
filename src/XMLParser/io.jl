@@ -87,7 +87,7 @@ function readXMLTag(token,_empty=false)
 	@assert mod(length(pieces)-1,2)==0
 	for i = 2:2:length(pieces)
 		key = pieces[i]
-		val = pieces[i+1]
+		val = replace(pieces[i+1], "\""=>"")
 		push!(attributes,XMLAttribute(key,val))
 	end
 	if _empty == false
@@ -155,7 +155,7 @@ end
 
 function writeAttribute(f::IOStream,attr)
 	key,val = attr.key,attr.val 
-	write(f," $key=$val")
+	write(f," $key=\"$val\"")
 end
 
 

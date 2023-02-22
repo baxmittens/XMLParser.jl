@@ -24,14 +24,14 @@ function Base.convert(::Type{XMLElement},obj::T,tpn::Union{Nothing,String}=nothi
 	tag = XMLTag(gettypestring(T))
 	typeparams = gettypeparams(T)
 	if typeparams != nothing
-		push!(tag.attributes, XMLAttribute("julia:tp","\""*typeparams*"\""))
+		push!(tag.attributes, XMLAttribute("julia:tp",typeparams))
 	end
 	if tpn != nothing
-		push!(tag.attributes, XMLAttribute("julia:tpn","\""*tpn*"\""))
+		push!(tag.attributes, XMLAttribute("julia:tpn",tpn))
 	end
 	for (fieldvar,fieldtp) in zip(fieldnames(T),fieldtypes(T))
 		if isprimitivetype(fieldtp)
-			push!(tag.attributes, XMLAttribute(string(fieldvar),"\""*string(getfield(obj,fieldvar))*"\""))
+			push!(tag.attributes, XMLAttribute(string(fieldvar),string(getfield(obj,fieldvar))))
 		else
 			push!(content, convert(XMLElement, getfield(obj,fieldvar), string(fieldvar)))
 		end
