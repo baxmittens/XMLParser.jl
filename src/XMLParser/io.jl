@@ -8,19 +8,28 @@ mutable struct IOState
 	end
 end
 
-function tokenizer(line)
+
+function tokenizer(line,state)
 	tagopening = findall("<",line)
 	tagclosing = findall(">",line)
 	ntag = length(tagopening)
-	@assert length(tagopening) == length(tagclosing)
-	token = String[]
-	if ntag <= 1
-		push!(token,line)
-		return token
-	else 
-		push!(token,line[tagopening[1].start:tagclosing[1].start])
-		append!(token,tokenizer(line[tagclosing[1].start+1:tagopening[end].start-1]))
-		push!(token,line[tagopening[end].start:tagclosing[end].start])
+	if length(tagopening) == length(tagclosing)
+		token = String[]
+		if ntag <= 1
+			push!(token,line)
+			return token
+		else 
+			push!(token,line[tagopening[1].start:tagclosing[1].start])
+			append!(token,tokenizer(line[tagclosing[1].start+1:tagopening[end].start-1],state))
+			push!(token,line[tagopening[end].start:tagclosing[end].start])
+		end
+	else
+		line *= " "*strip(readline(state.f))
+		if contains(line,"<!--")
+			return comment_handler(line,state)
+		else
+			return tokenizer(line,state)
+		end
 	end
 end
 
@@ -29,7 +38,7 @@ function comment_handler(line,state)
 	comment_end = findall("-->",line)
 	if length(comment_end) == length(comment_start) == 0
 		if !isempty(strip(line))
-			append!(state.tokens,tokenizer(line))
+			append!(state.tokens,tokenizer(line,state))
 		end
 		return nexttoken(state)
 	elseif isempty(comment_end)
@@ -58,7 +67,7 @@ function nexttoken(state)
 		if contains(line,"<!--")
 			return comment_handler(line,state)
 		end
-		append!(state.tokens,tokenizer(line))
+		append!(state.tokens,tokenizer(line,state))
 		return popfirst!(state.tokens)
 	else
 		return ""
