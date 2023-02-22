@@ -12,16 +12,14 @@ mutable struct XMLAttribute
 	val::String
 end
 
-abstract type AbstractXMLTag end
-
 """
-`XMLTag <: AbstractXMLTag`
+`XMLTag`
 
 Creates a XML tag
 
 `XMLTag(name::String, attributes::Vector{XMLAttribute})`
 """	
-mutable struct XMLTag <: AbstractXMLTag
+mutable struct XMLTag
 	name::String
 	attributes::Vector{XMLAttribute}
 end
@@ -29,36 +27,40 @@ function XMLTag(name::String)
 	return XMLTag(name,Vector{XMLAttribute}())
 end
 
+
+abstract type AbstractXMLElement end
+
 """
-`XMLEmptyTag <: AbstractXMLTag`
+`XMLElement <: AbstractXMLElement`
 
-Creates a XML emptytag
+Creates a XML element
 
-`XMLEmptyTag(name::String, attributes::Vector{XMLAttribute})`
+`XMLElement(tag::XMLTag, content::Vector{Any})`
 """	
-mutable struct XMLEmptyTag <: AbstractXMLTag
-	name::String
-	attributes::Vector{XMLAttribute}
+mutable struct XMLElement <: AbstractXMLElement
+	tag::XMLTag
+	content::Vector{Any}
+	XMLElement() = begin; el = new(); el.content = Any[]; return el; end
+	XMLElement(tag,content) = new(tag,content)
 end
 
 """
-`XMLElement`
+`XMLEmptyElement <: AbstractXMLElement`
 
 Creates a XML element
 
 `XMLElement(tag::AbstractXMLTag, content::Vector{Any})`
 """	
-mutable struct XMLElement
-	tag::AbstractXMLTag
-	content::Vector{Any}
-	XMLElement() = begin; el = new(); el.content = Any[]; return el; end
-	XMLElement(tag,content) = new(tag,content)
+mutable struct XMLEmptyElement <: AbstractXMLElement
+	tag::XMLTag
+	XMLEmptyElement() = begin; el = new(); return el; end
+	XMLEmptyElement(tag) = new(tag)
 end
 
 include(joinpath(".","XMLParser","io.jl"))
 include(joinpath(".","XMLParser","utils.jl"))
 include(joinpath(".","XMLParser","julia2xml.jl"))
 
-export XMLAttribute,XMLTag,XMLEmptyTag,XMLElement,IOState,getElements!,getElements,getChildrenbyTagName!,getChildrenbyTagName,copyElementWoContent,hasAttributekey,getAttribute,setAttribute,readXMLElement,writeXMLElement,writeXML,XML2Julia,Julia2XML
+export XMLAttribute,XMLTag,XMLElement,XMLEmptyElement,IOState,getElements!,getElements,getChildrenbyTagName!,getChildrenbyTagName,copyElementWoContent,hasAttributekey,getAttribute,setAttribute,readXMLElement,writeXMLElement,writeXML,XML2Julia,Julia2XML
 
 end #module XMLParser

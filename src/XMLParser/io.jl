@@ -66,8 +66,8 @@ function nexttoken(state)
 end
 
 hastokens(state) = !isempty(state.tokens) || !eof(state.f)
-istag(token) = !isempty(token) && token[1] == '<' && token[end] == '>' && token[end-1] != '/'
-isemptytag(token) = !isempty(token) && token[1] == '<' && token[end] == '>' && token[end-1] == '/'
+iselement(token) = !isempty(token) && token[1] == '<' && token[end] == '>' && token[end-1] != '/'
+isemptyelement(token) = !isempty(token) && token[1] == '<' && token[end] == '>' && token[end-1] == '/'
 
 function readXMLTag(token,_empty=false)
 	token = replace(token,"<"=>"")
@@ -90,16 +90,16 @@ function readXMLTag(token,_empty=false)
 		val = replace(pieces[i+1], "\""=>"")
 		push!(attributes,XMLAttribute(key,val))
 	end
-	if _empty == false
-		return XMLTag(name,attributes)
-	else
-		return XMLEmptyTag(name,attributes)
-	end
+	#if _empty == false
+	return XMLTag(name,attributes)
+	#else
+	#	return XMLEmptyTag(name,attributes)
+	#end
 end
 
 function readXMLInclude(file)
 	state = IOState(file)
-	elements = Vector{XMLElement}()
+	elements = Vector{AbstractXMLElement}()
 	while hastokens(state)
 		element = readXMLElement(state)
 		if isdefined(element,:tag)
@@ -115,7 +115,7 @@ function readXMLElement(state)
 	while hastokens(state)
 		token = nexttoken(state)
 		#println(token)
-		if istag(token)
+		if iselement(token)
 			tag = readXMLTag(token)
 			if !isdefined(element,:tag)
 				element.tag = tag
@@ -131,7 +131,7 @@ function readXMLElement(state)
 					push!(element.content,readXMLElement(state))
 				end
 			end
-		elseif isemptytag(token)
+		elseif isemptyelement(token)
 			@assert isdefined(element,:tag) "Empty-tag cannot be root"
 			tag = readXMLTag(token,true)
 			if tag.name == "include"
@@ -144,7 +144,7 @@ function readXMLElement(state)
 					error("Undefined attribute key $(tag.attributes)")
 				end
 			else
-				push!(element.content,XMLElement(tag,Any[]))
+				push!(element.content,XMLEmptyElement(tag))
 			end
 		else
 			push!(element.content,token)
