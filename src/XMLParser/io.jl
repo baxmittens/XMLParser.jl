@@ -235,7 +235,7 @@ end
 #	return str
 #end
 
-function Base.string(tag::XMLTag,tab::Int=0)
+function Base.string(tag::XMLTag,tab::Int=0,_empty=false)
 	str = repeat("\t",tab)*"<$(tag.name)"
 	if length(tag.attributes) > 0
 		for i in 1:length(tag.attributes)-1
@@ -243,7 +243,11 @@ function Base.string(tag::XMLTag,tab::Int=0)
 		end
 		str *= " "*string(tag.attributes[end])
 	end
-	str *= ">"
+	if _empty
+		str *= "/>"
+	else
+		str *= ">"
+	end
 	return str
 end
 
@@ -261,6 +265,6 @@ function Base.string(el::XMLElement, tab::Int=0)
 end
 
 function Base.string(el::XMLEmptyElement, tab::Int=0)
-	str = string(el.tag,tab)
+	str = string(el.tag,tab,true)
 	return str
 end
