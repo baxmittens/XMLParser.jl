@@ -172,23 +172,23 @@ function writeTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
 	end
 end
 
-#function writeTag(f::IOStream,tag::XMLEmptyTag,tab::Int=0,_sec=false)
-#	if !_sec
-#		write(f,repeat("\t",tab))
-#		write(f,"<$(tag.name)")
-#		for attr in tag.attributes
-#			writeAttribute(f,attr)
-#		end
-#		write(f,"/>\n")
-#	end
-#end
+function writeEmptyTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
+	if !_sec
+		write(f,repeat("\t",tab))
+		write(f,"<$(tag.name)")
+		for attr in tag.attributes
+			writeAttribute(f,attr)
+		end
+		write(f,"/>\n")
+	end
+end
 
 """
 `writeXMLElement(f::IOStream, el::XMLElement)`
 
 Writes a `XMLElement` to an `IOStream`.
 """
-function writeXMLElement(f::IOStream, el::AbstractXMLElement,tab::Int=0)
+function writeXMLElement(f::IOStream, el::XMLElement,tab::Int=0)
 	writeTag(f,el.tag,tab)
 	for con in el.content
 		if typeof(con) == XMLElement
@@ -200,6 +200,16 @@ function writeXMLElement(f::IOStream, el::AbstractXMLElement,tab::Int=0)
 		end
 	end
 	el.tag.name[1] != '?' ? writeTag(f,el.tag,tab,true) : nothing
+end
+
+
+"""
+`writeXMLElement(f::IOStream, el::XMLElement)`
+
+Writes a `XMLElement` to an `IOStream`.
+"""
+function writeXMLElement(f::IOStream, el::XMLEmptyElement,tab::Int=0)
+	writeEmptyTag(f,el.tag,tab)
 end
 
 """
