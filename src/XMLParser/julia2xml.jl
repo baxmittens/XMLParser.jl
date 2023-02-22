@@ -19,7 +19,7 @@ function istpname(attr::XMLAttribute)
 	return attr.key == "julia:tpn"
 end
 
-function Base.convert(::Type{XMLElement},obj::T,tpn::Union{Nothing,String}=nothing) where T
+function Julia2XML(obj::T,tpn::Union{Nothing,String}=nothing) where T
 	content = Any[]
 	tag = XMLTag(gettypestring(T))
 	typeparams = gettypeparams(T)
@@ -33,7 +33,7 @@ function Base.convert(::Type{XMLElement},obj::T,tpn::Union{Nothing,String}=nothi
 		if isprimitivetype(fieldtp)
 			push!(tag.attributes, XMLAttribute(string(fieldvar),string(getfield(obj,fieldvar))))
 		else
-			push!(content, convert(XMLElement, getfield(obj,fieldvar), string(fieldvar)))
+			push!(content, Julia2XML(getfield(obj,fieldvar), string(fieldvar)))
 		end
 	end
 	el = XMLElement(tag,content)

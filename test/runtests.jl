@@ -37,8 +37,8 @@ a = read(XMLElement, filename2)
 obj = tmp(1.0,1)
 obj2 = ntmp(1.0,1,tmp(2.0,1),tmp(1,1.0),tmp2(3,3))
 
-el = convert(XMLElement, obj)
-el2 = convert(XMLElement, obj2)
+el = Julia2XML(obj)
+el2 = Julia2XML(obj2)
 
 filename = "./tst.xml"
 f = open(filename,"w")
