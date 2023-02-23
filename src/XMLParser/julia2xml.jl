@@ -34,6 +34,14 @@ end
 
 function Julia2XML(obj::Vector{T},tpn::Union{Nothing,String}=nothing) where T
 	content,tag = Julia2XMLinit(obj,tpn)
+	for (i,o) in enumerate(obj)
+		otp = typoef(o)
+		if isprimitivetype(otp) || otp == DataType  || otp == String 
+			push!(content, o)
+		else
+			push!(content, Julia2XML(fieldvar, string(fieldvarname)))
+		end
+	end
 	return XMLElement(tag,content)
 end
 
