@@ -79,7 +79,7 @@ function dict2obj(_type::Type{T}, _dict::Dict{Symbol,Any}) where {T}
 	return T((_dict[x] for x in fieldnames(T))...)
 end
 
-function XML2Julia(el::XMLElement)
+function XML2Julia(el::AbstractXMLElement)
 	_type = gettype(el)
 	_dict = Dict{Symbol,Any}()
 	attrs = filter(x->!istypeparam(x) && !istpname(x) ,el.tag.attributes)
@@ -103,8 +103,9 @@ function XML2Julia(el::XMLElement)
 			s = Symbol(tpn[1].val)
 			_dict[s] = XML2Julia(con)
 		else
-			println(con)
+			_dict[s] = con
 		end
 	end
+	println(_dict)
 	return dict2obj(_type,_dict)
 end
