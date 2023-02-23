@@ -162,8 +162,9 @@ function readXMLElement(state)
 	return element
 end
 
-function writeAttribute(f::IOStream,attr)
+function writeAttribute(f::IOStream,attr,tab::Int=0)
 	key,val = attr.key,attr.val 
+	write(f,repeat("\t",tab))
 	write(f," $key=\"$val\"\n")
 end
 
@@ -173,7 +174,7 @@ function writeTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
 	if !_sec
 		write(f,"<$(tag.name)\n")
 		for attr in tag.attributes
-			writeAttribute(f,attr)
+			writeAttribute(f,attr,tab+1)
 		end
 		write(f,">\n")
 	else
@@ -186,7 +187,7 @@ function writeEmptyTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
 		write(f,repeat("\t",tab))
 		write(f,"<$(tag.name)")
 		for attr in tag.attributes
-			writeAttribute(f,attr)
+			writeAttribute(f,attr,tab+1)
 		end
 		write(f,"/>\n")
 	end

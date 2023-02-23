@@ -29,11 +29,21 @@ function Julia2XML(obj::T,tpn::Union{Nothing,String}=nothing) where T
 	if tpn != nothing
 		push!(tag.attributes, XMLAttribute("julia:tpn",tpn))
 	end
-	for (fieldvar,fieldtp) in zip(fieldnames(T),fieldtypes(T))
-		if isprimitivetype(fieldtp)
-			push!(tag.attributes, XMLAttribute(string(fieldvar),string(getfield(obj,fieldvar))))
+	for fieldvarname in fieldnames(T)
+		fieldvar = getfield(obj,fieldvarname)
+		fieldtp = typeof(fieldvar)
+		if isprimitivetype(fieldtp) || fieldtp == DataType  || fieldtp == String 
+			push!(tag.attributes, XMLAttribute(string(fieldvarname),string(fieldvar)))
+		elseif fieldtp <: Array
+			for var in fieldvar
+				if isprimitivetype(fieldtp) || fieldtp == DataType  || fieldtp == String 
+					push!(content, var)
+				else
+					push!(content, Julia2XML(var))
+				end
+			end
 		else
-			push!(content, Julia2XML(getfield(obj,fieldvar), string(fieldvar)))
+			push!(content, Julia2XML(fieldvar, string(fieldvarname)))
 		end
 	end
 	el = XMLElement(tag,content)
