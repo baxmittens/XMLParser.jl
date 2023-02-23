@@ -87,7 +87,7 @@ function XML2Julia(el::XMLElement)
 		fieldnm = Symbol(attr.key)
 		fieldtp = fieldtype(_type, fieldnm)
 		if fieldtp == DataType
-			fieldvar = eval(Meta.parse(replace(attr.val,"\""=>"")))
+			fieldvar = eval(Meta.parse("Main."*replace(attr.val,"\""=>"")))
 		else
 			fieldvar = parse(fieldtp, replace(attr.val,"\""=>""))
 		end
