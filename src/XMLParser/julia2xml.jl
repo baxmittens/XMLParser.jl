@@ -96,7 +96,8 @@ function XML2Julia(el::XMLElement)
 		_dict[fieldnm] = fieldvar
 	end
 	for con in el.content
-		if con <: AbstractXMLElement
+		typecon = typeof(con)
+		if typecon <: AbstractXMLElement
 			tpn = filter(istpname, con.tag.attributes)
 			@assert length(tpn) == 1
 			s = Symbol(tpn[1].val)
