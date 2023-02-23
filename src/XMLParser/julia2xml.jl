@@ -19,7 +19,7 @@ function istpname(attr::XMLAttribute)
 	return attr.key == "julia:tpn"
 end
 
-function Julia2XML(obj::T,tpn::Union{Nothing,String}=nothing) where T
+function Julia2XMLinit(obj::T,tpn::Union{Nothing,String}=nothing) where T
 	content = Any[]
 	tag = XMLTag(gettypestring(T))
 	typeparams = gettypeparams(T)
@@ -29,19 +29,21 @@ function Julia2XML(obj::T,tpn::Union{Nothing,String}=nothing) where T
 	if tpn != nothing
 		push!(tag.attributes, XMLAttribute("julia:tpn",tpn))
 	end
+	return content,tag
+end
+
+function Julia2XML(obj::Vector{T},tpn::Union{Nothing,String}=nothing) where T
+	content,tag = Julia2XMLinit(obj,tpn)
+	return XMLElement(tag,content)
+end
+
+function Julia2XML(obj::T,tpn::Union{Nothing,String}=nothing) where T
+	content,tag = Julia2XMLinit(obj,tpn)
 	for fieldvarname in fieldnames(T)
 		fieldvar = getfield(obj,fieldvarname)
 		fieldtp = typeof(fieldvar)
 		if isprimitivetype(fieldtp) || fieldtp == DataType  || fieldtp == String 
 			push!(tag.attributes, XMLAttribute(string(fieldvarname),string(fieldvar)))
-		elseif fieldtp <: Array
-			for var in fieldvar
-				if isprimitivetype(fieldtp) || fieldtp == DataType  || fieldtp == String 
-					push!(content, var)
-				else
-					push!(content, Julia2XML(var))
-				end
-			end
 		else
 			push!(content, Julia2XML(fieldvar, string(fieldvarname)))
 		end
