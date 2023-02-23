@@ -179,7 +179,7 @@ function writeTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
 		write(f,repeat("\t",tab))
 		write(f,">\n")
 	else
-		write(f,repeat("\t",tab))
+		write(f,repeat("\t",tab-1))
 		write(f,"</$(tag.name)>\n")
 	end
 end

@@ -56,7 +56,11 @@ function Julia2XML(obj::T,tpn::Union{Nothing,String}=nothing) where T
 			push!(content, Julia2XML(fieldvar, string(fieldvarname)))
 		end
 	end
-	el = XMLElement(tag,content)
+	if isempty(content)
+		el = XMLEmptyElement(tag)
+	else
+		el = XMLElement(tag,content)
+	end
 	return el
 end
 
