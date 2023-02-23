@@ -37,7 +37,7 @@ function Julia2XML(obj::Vector{T},tpn::Union{Nothing,String}=nothing) where T
 	for (i,o) in enumerate(obj)
 		otp = typeof(o)
 		if isprimitivetype(otp) || otp == DataType  || otp == String 
-			push!(content, o)
+			push!(content, string(o))
 		else
 			push!(content, Julia2XML(fieldvar, string(fieldvarname)))
 		end
