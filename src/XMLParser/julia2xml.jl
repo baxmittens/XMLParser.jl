@@ -81,7 +81,7 @@ end
 
 function _parse(::Type{T}, obj::String) where {T}
 	if T == DataType
-		return = eval(Meta.parse("Main."*obj))
+		return eval(Meta.parse("Main."*obj))
 	elseif fieldtp == String
 		return obj
 	else
