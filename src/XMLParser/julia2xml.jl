@@ -79,6 +79,16 @@ function dict2obj(_type::Type{T}, _dict::Dict{Symbol,Any}) where {T}
 	return T((_dict[x] for x in fieldnames(T))...)
 end
 
+function _parse(::Type{T}, obj::String) where {T}
+	if T == DataType
+		return = eval(Meta.parse("Main."*obj))
+	elseif fieldtp == String
+		return obj
+	else
+		return parse(T, obj)
+	end
+end
+
 function XML2Julia(el::AbstractXMLElement)
 	_type = gettype(el)
 	if _type <: Array
@@ -87,7 +97,7 @@ function XML2Julia(el::AbstractXMLElement)
 			if typeof(con) <: AbstractXMLElement
 				push!(ar,XML2Julia(con))
 			else
-				push!(ar,parse(_type.parameters[1],con))
+				push!(ar,_parse(_type.parameters[1],con))
 			end
 		end
 		return ar
@@ -97,13 +107,7 @@ function XML2Julia(el::AbstractXMLElement)
 		for attr in attrs
 			fieldnm = Symbol(attr.key)
 			fieldtp = fieldtype(_type, fieldnm)
-			if fieldtp == DataType
-				fieldvar = eval(Meta.parse("Main."*attr.val))
-			elseif fieldtp == String
-				fieldvar = attr.val
-			else
-				fieldvar = parse(fieldtp, attr.val)
-			end
+			fieldvar = _parse(fieldtp, attr.val)
 			_dict[fieldnm] = fieldvar
 		end
 		if typeof(el) == XMLElement  
