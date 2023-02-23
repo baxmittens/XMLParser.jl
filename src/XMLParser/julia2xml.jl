@@ -87,16 +87,18 @@ function XML2Julia(el::XMLElement)
 		fieldnm = Symbol(attr.key)
 		fieldtp = fieldtype(_type, fieldnm)
 		if fieldtp == DataType
-			fieldvar = eval(Meta.parse("Main."*replace(attr.val,"\""=>"")))
+			fieldvar = eval(Meta.parse("Main."*attr.val))
+		elseif fieldtp == String
+			fieldvar = attr.val
 		else
-			fieldvar = parse(fieldtp, replace(attr.val,"\""=>""))
+			fieldvar = parse(fieldtp, attr.val)
 		end
 		_dict[fieldnm] = fieldvar
 	end
 	for con in el.content
 		tpn = filter(istpname, con.tag.attributes)
 		@assert length(tpn) == 1
-		s = Symbol(replace(tpn[1].val,"\""=>""))
+		s = Symbol(tpn[1].val)
 		_dict[s] = XML2Julia(con)
 	end
 	return dict2obj(_type,_dict)
