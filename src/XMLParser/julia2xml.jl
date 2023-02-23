@@ -84,6 +84,8 @@ function _parse(::Type{T}, obj::String) where {T}
 		return eval(Meta.parse("Main."*obj))
 	elseif T == String
 		return obj
+	elseif T <: Union
+
 	else
 		return parse(T, obj)
 	end
