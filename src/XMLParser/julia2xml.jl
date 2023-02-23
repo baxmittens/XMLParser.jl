@@ -39,7 +39,7 @@ function Julia2XML(obj::Vector{T},tpn::Union{Nothing,String}=nothing) where T
 		if isprimitivetype(otp) || otp == DataType  || otp == String 
 			push!(content, string(o))
 		else
-			push!(content, Julia2XML(fieldvar, string(fieldvarname)))
+			push!(content, Julia2XML(o))
 		end
 	end
 	return XMLElement(tag,content)
