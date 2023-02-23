@@ -64,7 +64,7 @@ function Julia2XML(obj::T,tpn::Union{Nothing,String}=nothing) where T
 	return el
 end
 
-function gettype(el::XMLElement)
+function gettype(el::AbstractXMLElement)
 	_type =  el.tag.name
 	tp = filter(istypeparam, el.tag.attributes)
 	ltp = length(tp)
@@ -79,33 +79,39 @@ function dict2obj(_type::Type{T}, _dict::Dict{Symbol,Any}) where {T}
 	return T((_dict[x] for x in fieldnames(T))...)
 end
 
-function XML2Julia(el::AbstractXMLElement)
+function XML2Julia(el::XMLElement)
 	_type = gettype(el)
-	_dict = Dict{Symbol,Any}()
-	attrs = filter(x->!istypeparam(x) && !istpname(x) ,el.tag.attributes)
-	for attr in attrs
-		fieldnm = Symbol(attr.key)
-		fieldtp = fieldtype(_type, fieldnm)
-		if fieldtp == DataType
-			fieldvar = eval(Meta.parse("Main."*attr.val))
-		elseif fieldtp == String
-			fieldvar = attr.val
-		else
-			fieldvar = parse(fieldtp, attr.val)
+	if _type <: Array
+		ar = _type()
+		for con in el.content
+			if typeof(con) <: AbstractXMLElement
+				push!(ar,XML2Julia(con))
+			else
+				push!(ar,parse(_type.parameters[1],con))
+			end
 		end
-		_dict[fieldnm] = fieldvar
-	end
-	for con in el.content
-		typecon = typeof(con)
-		if typecon <: AbstractXMLElement
+		return ar
+	else
+		_dict = Dict{Symbol,Any}()
+		attrs = filter(x->!istypeparam(x) && !istpname(x), el.tag.attributes)
+		for attr in attrs
+			fieldnm = Symbol(attr.key)
+			fieldtp = fieldtype(_type, fieldnm)
+			if fieldtp == DataType
+				fieldvar = eval(Meta.parse("Main."*attr.val))
+			elseif fieldtp == String
+				fieldvar = attr.val
+			else
+				fieldvar = parse(fieldtp, attr.val)
+			end
+			_dict[fieldnm] = fieldvar
+		end
+		for con in el.content
 			tpn = filter(istpname, con.tag.attributes)
 			@assert length(tpn) == 1
 			s = Symbol(tpn[1].val)
 			_dict[s] = XML2Julia(con)
-		else
-			_dict[s] = con
 		end
 	end
-	println(_dict)
 	return dict2obj(_type,_dict)
 end
