@@ -79,7 +79,7 @@ function dict2obj(_type::Type{T}, _dict::Dict{Symbol,Any}) where {T}
 	return T((_dict[x] for x in fieldnames(T))...)
 end
 
-function XML2Julia(el::XMLElement)
+function XML2Julia(el::AbstractXMLElement)
 	_type = gettype(el)
 	if _type <: Array
 		ar = _type()
@@ -106,11 +106,13 @@ function XML2Julia(el::XMLElement)
 			end
 			_dict[fieldnm] = fieldvar
 		end
-		for con in el.content
-			tpn = filter(istpname, con.tag.attributes)
-			@assert length(tpn) == 1
-			s = Symbol(tpn[1].val)
-			_dict[s] = XML2Julia(con)
+		if typeof(el) == XMLElement  
+			for con in el.content
+				tpn = filter(istpname, con.tag.attributes)
+				@assert length(tpn) == 1
+				s = Symbol(tpn[1].val)
+				_dict[s] = XML2Julia(con)
+			end
 		end
 	end
 	return dict2obj(_type,_dict)
