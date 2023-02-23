@@ -12,11 +12,11 @@ function gettypeparams(_type::Type{T}) where T
 end
 
 function istypeparam(attr::XMLAttribute)
-	return attr.key == "julia:tp"
+	return attr.key == "julia:type"
 end
 
 function istpname(attr::XMLAttribute)
-	return attr.key == "julia:tpn"
+	return attr.key == "julia:fieldname"
 end
 
 function Julia2XMLinit(obj::T,tpn::Union{Nothing,String}=nothing) where T
@@ -24,10 +24,10 @@ function Julia2XMLinit(obj::T,tpn::Union{Nothing,String}=nothing) where T
 	tag = XMLTag(gettypestring(T))
 	typeparams = gettypeparams(T)
 	if typeparams != nothing
-		push!(tag.attributes, XMLAttribute("julia:tp",typeparams))
+		push!(tag.attributes, XMLAttribute("julia:type",typeparams))
 	end
 	if tpn != nothing
-		push!(tag.attributes, XMLAttribute("julia:tpn",tpn))
+		push!(tag.attributes, XMLAttribute("julia:fieldname",tpn))
 	end
 	return content,tag
 end
@@ -86,7 +86,11 @@ function XML2Julia(el::XMLElement)
 	for attr in attrs
 		fieldnm = Symbol(attr.key)
 		fieldtp = fieldtype(_type, fieldnm)
-		fieldvar = parse(fieldtp, replace(attr.val,"\""=>""))
+		if fieldtp == DataType
+			fieldvar = eval(Meta.parse(replace(attr.val,"\""=>"")))
+		else
+			fieldvar = parse(fieldtp, replace(attr.val,"\""=>""))
+		end
 		_dict[fieldnm] = fieldvar
 	end
 	for con in el.content
