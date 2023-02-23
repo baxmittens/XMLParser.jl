@@ -172,7 +172,10 @@ end
 function writeTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
 	write(f,repeat("\t",tab))
 	if !_sec
-		write(f,"<$(tag.name)\n")
+		write(f,"<$(tag.name)")
+		if !isempty(tag.attributes)
+			write(f,"\n")
+		end
 		for attr in tag.attributes
 			writeAttribute(f,attr,tab+1)
 		end
@@ -187,6 +190,9 @@ function writeEmptyTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
 	if !_sec
 		write(f,repeat("\t",tab))
 		write(f,"<$(tag.name)")
+		if !isempty(tag.attributes)
+			write(f,"\n")
+		end
 		for attr in tag.attributes
 			writeAttribute(f,attr,tab+1)
 		end
