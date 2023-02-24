@@ -87,7 +87,6 @@ function gettype(el::AbstractXMLElement)
 		_type *= "{"*tryeval(tp[1].val)*"}"
 	end
 	tt = "Main."*_type
-	println(tt)
 	return eval(Meta.parse(tt))
 end
 
