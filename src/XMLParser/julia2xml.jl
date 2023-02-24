@@ -36,7 +36,7 @@ function Julia2XML(obj::Vector{T},tpn::Union{Nothing,String}=nothing) where T
 	content,tag = Julia2XMLinit(obj,tpn)
 	for (i,o) in enumerate(obj)
 		otp = typeof(o)
-		if isprimitivetype(otp) || otp == DataType  || otp == String 
+		if isprimitivetype(otp) || otp == DataType  || otp == String || otp == Type 
 			push!(content, string(o))
 		else
 			push!(content, Julia2XML(o))
@@ -50,7 +50,7 @@ function Julia2XML(obj::T,tpn::Union{Nothing,String}=nothing) where T
 	for fieldvarname in fieldnames(T)
 		fieldvar = getfield(obj,fieldvarname)
 		fieldtp = typeof(fieldvar)
-		if isprimitivetype(fieldtp) || fieldtp == DataType  || fieldtp == String 
+		if isprimitivetype(fieldtp) || fieldtp == DataType  || fieldtp == String || otp == Type
 			push!(tag.attributes, XMLAttribute(string(fieldvarname),string(fieldvar)))
 		else
 			push!(content, Julia2XML(fieldvar, string(fieldvarname)))
@@ -80,12 +80,11 @@ function dict2obj(_type::Type{T}, _dict::Dict{Symbol,Any}) where {T}
 end
 
 function _parse(::Type{T}, obj::String) where {T}
-	if T == DataType
+	if T == DataType || T == Type 
 		return eval(Meta.parse("Main."*obj))
 	elseif T == String
 		return obj
-	elseif T <: Union
-
+	#elseif T == Type
 	else
 		return parse(T, obj)
 	end
