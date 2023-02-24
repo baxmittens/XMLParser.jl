@@ -72,7 +72,7 @@ function gettype(el::AbstractXMLElement)
 	if ltp == 1
 		_type *= "{"*replace(tp[1].val,"\""=>"")*"}"
 	end
-	return eval(Meta.parse("Main."*_type))
+	return eval(Meta.parse(".."*_type))
 end
 
 function dict2obj(_type::Type{T}, _dict::Dict{Symbol,Any}) where {T}
