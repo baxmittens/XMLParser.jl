@@ -50,7 +50,7 @@ function Julia2XML(obj::T,tpn::Union{Nothing,String}=nothing) where T
 	for fieldvarname in fieldnames(T)
 		fieldvar = getfield(obj,fieldvarname)
 		fieldtp = typeof(fieldvar)
-		if isprimitivetype(fieldtp) || fieldtp == DataType  || fieldtp == String || otp == Type
+		if isprimitivetype(fieldtp) || fieldtp == DataType  || fieldtp == String || fieldtp == Type
 			push!(tag.attributes, XMLAttribute(string(fieldvarname),string(fieldvar)))
 		else
 			push!(content, Julia2XML(fieldvar, string(fieldvarname)))
