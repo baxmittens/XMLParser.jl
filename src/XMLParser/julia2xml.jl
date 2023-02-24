@@ -24,7 +24,7 @@ function Julia2XMLinit(obj::T,tpn::Union{Nothing,String}=nothing) where T
 	tag = XMLTag(gettypestring(T))
 	typeparams = gettypeparams(T)
 	if typeparams != nothing
-		push!(tag.attributes, XMLAttribute("julia:type",typeparams))
+		push!(tag.attributes, XMLAttribute("julia:type",string(typeparams)))
 	end
 	if tpn != nothing
 		push!(tag.attributes, XMLAttribute("julia:fieldname",tpn))
