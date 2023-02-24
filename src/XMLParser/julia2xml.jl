@@ -80,7 +80,7 @@ function dict2obj(_type::Type{T}, _dict::Dict{Symbol,Any}) where {T}
 end
 
 function _parse(::Type{T}, obj::String) where {T}
-	if T == DataType || T == UnionAll 
+	if T == DataType || T == Type 
 		return eval(Meta.parse("Main."*obj))
 	elseif T == String
 		return obj
