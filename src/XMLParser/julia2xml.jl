@@ -64,13 +64,27 @@ function Julia2XML(obj::T,tpn::Union{Nothing,String}=nothing) where T
 	return el
 end
 
+function tryeval(str::String)
+	splitstr = split(str,",")
+	retstr = Vector{String}()
+	for splstr in splitstr
+		try
+			eval(Meta.parse("Main."*splstr))
+			push!(retstr,"Main."*splstr)	
+		catch
+			push!(retstr,splstr)	
+		end
+	end
+	return foldl((x,y)->x*","*y,retstr)
+end
+
 function gettype(el::AbstractXMLElement)
 	_type =  el.tag.name
 	tp = filter(istypeparam, el.tag.attributes)
 	ltp = length(tp)
 	@assert ltp <= 1
 	if ltp == 1
-		_type *= "{"*replace(tp[1].val,"\""=>"")*"}"
+		_type *= "{"*tryeval(tp[1].val)*"}"
 	end
 	tt = "Main."*_type
 	println(tt)
