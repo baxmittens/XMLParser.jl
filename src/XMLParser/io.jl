@@ -93,7 +93,7 @@ function readXMLTag(token,_empty=false)
 	filter!(!isempty,pieces)
 	name = pieces[1]
 	attributes = XMLAttribute[]
-	@assert mod(length(pieces)-1,2)==0
+	@assert mod(length(pieces)-1,2)==0 "$pieces"
 	for i = 2:2:length(pieces)
 		key = pieces[i]
 		val = replace(pieces[i+1], "\""=>"")
