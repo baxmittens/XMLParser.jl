@@ -219,6 +219,9 @@ function writeXMLElement(f::IOStream, el::XMLElement,tab::Int=0)
 	el.tag.name[1] != '?' ? writeTag(f,el.tag,tab,true) : nothing
 end
 
+function writeXMLHeader(f::IOStream, el::XMLHeader)
+	write(f,el.header+"\n")
+end
 
 """
 `writeXMLElement(f::IOStream, el::XMLElement)`
@@ -227,6 +230,13 @@ Writes a `XMLElement` to an `IOStream`.
 """
 function writeXMLElement(f::IOStream, el::XMLEmptyElement,tab::Int=0)
 	writeEmptyTag(f,el.tag,tab)
+end
+
+function Base.write(filename::String, xmlfile::XMLFile)
+	f = open(filename,"w")
+	writeXMLHeader(f,xmlfile.header)
+	writeXMLElement(f,xmlfile.element)
+	close(f)
 end
 
 
