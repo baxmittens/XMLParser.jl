@@ -276,10 +276,12 @@ function Base.read(::Type{XMLFile}, file::String)
 	state = IOState(file)
 	header = read(XMLHeader,state)
 	elements = Vector{XMLElement}()
-	element = readXMLElement(state)
-	push!(elements,element)
+	element = read(XMLElement,state)
+	if element != nothing
+		push!(elements,element)
+	end
 	while element != nothing
-		element = readXMLElement(state)
+		element = read(XMLElement,state)
 		if element != nothing
 			push!(elements,element)
 		end
