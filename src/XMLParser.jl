@@ -67,7 +67,7 @@ mutable struct XMLFile
 end
 
 function XMLFile(xmlel::XMLElement)
-	header = XMLHeader("<?xml version="1.0" encoding="UTF-8"?>")
+	header = XMLHeader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
 	return XMLFile(header, xmlel)
 end
 
