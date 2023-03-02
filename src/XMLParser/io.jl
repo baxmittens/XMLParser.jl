@@ -8,7 +8,6 @@ mutable struct IOState
 	end
 end
 
-
 function tokenizer(line,state)
 	tagopening = findall("<",line)
 	tagclosing = findall(">",line)
@@ -230,6 +229,15 @@ function writeXMLElement(f::IOStream, el::XMLEmptyElement,tab::Int=0)
 	writeEmptyTag(f,el.tag,tab)
 end
 
+
+function Base.read(::Type{XMLHeader}, state::IOState)
+	tok = nexttoken(state)
+	ophead = findall("<?",tok)
+	clhead = findall("?>",tok)
+	@assert length(ophead) == length(clhead) == 1 && ophead[1].start == 1 && clhead[1].stop == length(tok) "no header found"
+	return XMLHeader(tok)
+end
+
 """
 `Base.read(::Type{XMLElement}, file::String)`
 
@@ -266,7 +274,7 @@ Returns a `XMLFile`.
 """
 function Base.read(::Type{XMLFile}, file::String)
 	state = IOState(file)
-	header = readXMLHeader(state)
+	header = read(XMLHeader,state)
 	elements = Vector{XMLElement}()
 	element = readXMLElement(state)
 	push!(elements,element)
