@@ -57,6 +57,15 @@ mutable struct XMLEmptyElement <: AbstractXMLElement
 	XMLEmptyElement(tag) = new(tag)
 end
 
+mutable struct XMLHeader
+	header::String
+end
+
+mutable struct XMLFile
+	header::XMLHeader
+	elements::Vector{AbstractXMLElement}
+end
+
 include(joinpath(".","XMLParser","io.jl"))
 include(joinpath(".","XMLParser","utils.jl"))
 include(joinpath(".","XMLParser","julia2xml.jl"))

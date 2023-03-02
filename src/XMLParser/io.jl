@@ -243,6 +243,43 @@ function Base.read(::Type{XMLElement}, file::String)
 	return element
 end
 
+"""
+`Base.read(::Type{XMLElement}, state::IOState)`
+
+Reads a XML file in location `file`.
+Returns a `XMLElement`.
+"""
+function Base.read(::Type{XMLElement}, state::IOState)
+	try
+		element = readXMLElement(state)
+		return element
+	catch
+		return nothing
+	end
+end
+
+"""
+`Base.read(::Type{XMLFile}, file::String)`
+
+Reads a XML file in location `file`.
+Returns a `XMLFile`.
+"""
+function Base.read(::Type{XMLFile}, file::String)
+	state = IOState(file)
+	header = readXMLHeader(state)
+	elements = Vector{XMLElement}()
+	element = readXMLElement(state)
+	push!(elements,element)
+	while element != nothing
+		element = readXMLElement(state)
+		if element != nothing
+			push!(elements,element)
+		end
+	end
+	close(state.f)
+	return XMLFile(header,elements)
+end
+
 function writeXML(el::AbstractXMLElement, filename::String)
 	f = open(filename,"w")
 	writeXMLElement(f,el)
