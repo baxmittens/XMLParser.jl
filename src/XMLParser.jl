@@ -63,7 +63,7 @@ end
 
 mutable struct XMLFile
 	header::XMLHeader
-	elements::Vector{AbstractXMLElement}
+	element::AbstractXMLElement
 end
 
 include(joinpath(".","XMLParser","io.jl"))

@@ -275,19 +275,9 @@ Returns a `XMLFile`.
 function Base.read(::Type{XMLFile}, file::String)
 	state = IOState(file)
 	header = read(XMLHeader,state)
-	elements = Vector{XMLElement}()
 	element = read(XMLElement,state)
-	if element != nothing
-		push!(elements,element)
-	end
-	while element != nothing
-		element = read(XMLElement,state)
-		if element != nothing
-			push!(elements,element)
-		end
-	end
 	close(state.f)
-	return XMLFile(header,elements)
+	return XMLFile(header,element)
 end
 
 function writeXML(el::AbstractXMLElement, filename::String)
