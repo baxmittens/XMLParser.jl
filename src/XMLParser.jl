@@ -66,6 +66,11 @@ mutable struct XMLFile
 	element::AbstractXMLElement
 end
 
+function XMLFile(xmlel::XMLElement)
+	header = XMLHeader("<?xml version="1.0" encoding="UTF-8"?>")
+	return XMLFile(header, xmlel)
+end
+
 include(joinpath(".","XMLParser","io.jl"))
 include(joinpath(".","XMLParser","utils.jl"))
 include(joinpath(".","XMLParser","julia2xml.jl"))

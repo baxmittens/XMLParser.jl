@@ -239,6 +239,10 @@ function Base.write(filename::String, xmlfile::XMLFile)
 	close(f)
 end
 
+function Base.write(filename::String, xmlelement::XMLElement)
+	write(filename, XMLFile(xmlelement))
+end
+
 
 function Base.read(::Type{XMLHeader}, state::IOState)
 	tok = nexttoken(state)

@@ -137,3 +137,7 @@ function XML2Julia(el::AbstractXMLElement)
 	end
 	return dict2obj(_type,_dict)
 end
+
+function XML2Julia(xmlfile::XMLFile)
+	return XML2Julia(xmlfile.element)
+end
