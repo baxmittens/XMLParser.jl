@@ -220,7 +220,7 @@ function writeXMLElement(f::IOStream, el::XMLElement,tab::Int=0)
 end
 
 function writeXMLHeader(f::IOStream, el::XMLHeader)
-	write(f,el.header+"\n")
+	write(f,el.header*"\n")
 end
 
 """
