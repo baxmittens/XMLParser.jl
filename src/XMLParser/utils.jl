@@ -131,7 +131,7 @@ Returns an `error("Attribute not found")` if `key` is not found. Returns `nothin
 function setAttribute(el::AbstractXMLElement,key::String,val)
 	for attribute in el.tag.attributes
 		if isequal(attribute.key,key)
-			attribute.val = "\""*string(val)*"\""
+			attribute.val = string(val)
 			return nothing
 		end
 	end
