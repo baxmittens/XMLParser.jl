@@ -77,6 +77,27 @@ hastokens(state) = !isempty(state.tokens) || !eof(state.f)
 iselement(token) = !isempty(token) && token[1] == '<' && token[end] == '>' && token[end-1] != '/'
 isemptyelement(token) = !isempty(token) && token[1] == '<' && token[end] == '>' && token[end-1] == '/'
 
+function splitattributes(str::String)
+	stringopen = false
+	items = String[]
+	_str = replace(str, "="=>" ")
+	for item in split(_str," ")
+		if stringopen
+			items[end] *= " " * item
+		else
+			push!(items,item)
+		end
+		if length(findall("\"", item)) == 1 
+			if stringopen
+				stringopen = false
+			else
+				stringopen = true
+			end
+		end
+	end
+	return items
+end
+
 function readXMLTag(token,_empty=false)
 	token = replace(token,"<"=>"")
 	token = replace(token,">"=>"")
@@ -87,8 +108,9 @@ function readXMLTag(token,_empty=false)
 			error()
 		end
 	end
-	token = replace(token, "="=>" ")
-	pieces = split(token," ")
+	#token = replace(token, "="=>" ")
+	#pieces = split(token," ")
+	pieces = splitattributes(token)
 	filter!(!isempty,pieces)
 	name = pieces[1]
 	attributes = XMLAttribute[]
