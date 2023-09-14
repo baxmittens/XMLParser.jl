@@ -110,7 +110,7 @@ function XML2Julia(el::AbstractXMLElement)
 	if _type <: Array
 		ar = _type()
 		for con in el.content
-			println(con)
+			#println(con)
 			if typeof(con) <: AbstractXMLElement
 				push!(ar,XML2Julia(con))
 			else

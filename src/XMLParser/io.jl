@@ -144,8 +144,6 @@ function readXMLElement(state)
 	element = XMLElement()
 	while hastokens(state)
 		token = nexttoken(state)
-		println("read xml element token")
-		println(token)
 		if iselement(token)
 			tag = readXMLTag(token)
 			if !isdefined(element,:tag)
@@ -303,7 +301,7 @@ function Base.read(::Type{XMLElement}, state::IOState)
 		element = readXMLElement(state)
 		return element
 	catch e
-		println("Base.read error")
+		@warn "read error"
 		println(e)
 		return nothing
 	end
