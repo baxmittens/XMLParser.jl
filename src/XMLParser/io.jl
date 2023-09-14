@@ -144,6 +144,7 @@ function readXMLElement(state)
 	element = XMLElement()
 	while hastokens(state)
 		token = nexttoken(state)
+		println("read xml element token")
 		println(token)
 		if iselement(token)
 			tag = readXMLTag(token)
@@ -165,10 +166,15 @@ function readXMLElement(state)
 			#@assert isdefined(element,:tag) "Empty-tag cannot be root"
 			if !isdefined(element,:tag)
 				#println(element)
+				println("dump element")
 				println(dump(element))
 				tag = readXMLTag(token,true)
+				println("read tag")
 				println(tag)
-				error()
+				tag = readXMLTag(token,false)
+				println("read tag2")
+				println(tag)
+				error("an error")
 			end
 			tag = readXMLTag(token,true)
 
@@ -306,6 +312,7 @@ function Base.read(::Type{XMLElement}, state::IOState)
 		element = readXMLElement(state)
 		return element
 	catch e
+		println("Base.read error")
 		println(e)
 		return nothing
 	end
