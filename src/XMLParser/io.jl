@@ -162,8 +162,16 @@ function readXMLElement(state)
 				end
 			end
 		elseif isemptyelement(token)
-			@assert isdefined(element,:tag) "Empty-tag cannot be root"
+			#@assert isdefined(element,:tag) "Empty-tag cannot be root"
+			if !isdefined(element,:tag)
+				println(element)
+				println(dump(element))
+				tag = readXMLTag(token,true)
+				println(tag)
+				error()
+			end
 			tag = readXMLTag(token,true)
+
 			if tag.name == "include"
 				@assert length(tag.attributes) == 1 "<include> does not support multiple attributes"
 				if tag.attributes[1].key == "file"
