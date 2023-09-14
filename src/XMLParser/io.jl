@@ -164,18 +164,6 @@ function readXMLElement(state)
 			end
 		elseif isemptyelement(token)
 			#@assert isdefined(element,:tag) "Empty-tag cannot be root"
-			#if !isdefined(element,:tag)
-			#	#println(element)
-			#	println("dump element")
-			#	println(dump(element))
-			#	tag = readXMLTag(token,true)
-			#	println("read tag")
-			#	println(tag)
-			#	tag = readXMLTag(token,false)
-			#	println("read tag2")
-			#	println(tag)
-			#	error("an error")
-			#end
 			tag = readXMLTag(token,true)
 			if !isdefined(element,:tag)
 				@warn "root is empty element"
