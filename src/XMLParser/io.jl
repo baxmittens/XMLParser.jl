@@ -297,7 +297,8 @@ function Base.read(::Type{XMLElement}, state::IOState)
 	try
 		element = readXMLElement(state)
 		return element
-	catch
+	catch e
+		println(e)
 		return nothing
 	end
 end
@@ -312,6 +313,8 @@ function Base.read(::Type{XMLFile}, file::String)
 	state = IOState(file)
 	header = read(XMLHeader,state)
 	element = read(XMLElement,state)
+	#println(header)
+	#println(element)
 	close(state.f)
 	return XMLFile(header,element)
 end
