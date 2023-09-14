@@ -144,7 +144,7 @@ function readXMLElement(state)
 	element = XMLElement()
 	while hastokens(state)
 		token = nexttoken(state)
-		#println(token)
+		println(token)
 		if iselement(token)
 			tag = readXMLTag(token)
 			if !isdefined(element,:tag)
@@ -261,7 +261,7 @@ function Base.write(filename::String, xmlfile::XMLFile)
 	close(f)
 end
 
-function Base.write(filename::String, xmlelement::XMLElement)
+function Base.write(filename::String, xmlelement::AbstractXMLElement)
 	write(filename, XMLFile(xmlelement))
 end
 
