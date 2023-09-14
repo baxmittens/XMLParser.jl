@@ -66,7 +66,7 @@ mutable struct XMLFile
 	element::AbstractXMLElement
 end
 
-function XMLFile(xmlel::XMLElement)
+function XMLFile(xmlel::AbstractXMLElement)
 	header = XMLHeader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
 	return XMLFile(header, xmlel)
 end
