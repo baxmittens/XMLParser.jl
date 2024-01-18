@@ -176,9 +176,8 @@ function Base.deepcopy(attr::XMLAttribute)
 end
 
 function Base.deepcopy(tag::XMLTag)
-	return Tag(deepcopy(tag.name), map(deepcopy,tag.attributes))
+	return XMLTag(deepcopy(tag.name), map(deepcopy,tag.attributes))
 end
-
 
 function Base.deepcopy(el::XMLElement)
 	return XMLElement(deepcopy(el.tag), map(deepcopy,el.content))
