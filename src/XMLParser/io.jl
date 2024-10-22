@@ -186,41 +186,42 @@ function readXMLElement(state)
 	return element
 end
 
-function writeAttribute(f::IOStream,attr,tab::Int=0)
+function writeAttribute(f::IOStream,attr,tab::Int=0,one_liner=false)
 	key,val = attr.key,attr.val 
-	write(f,repeat("\t",tab))
-	write(f," $key=\"$val\"\n")
+	one_liner ? nothing : write(f,repeat("\t",tab))
+	one_liner ? write(f," $key=\"$val\"") : write(f," $key=\"$val\"\n")
 end
 
 
-function writeTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
-	write(f,repeat("\t",tab))
+function writeTag(f::IOStream,tag::XMLTag,tab::Int=0,one_liner=false,_sec=false)
+	one_liner&&_sec ? nothing : write(f,repeat("\t",tab))
 	if !_sec
 		write(f,"<$(tag.name)")
 		if !isempty(tag.attributes)
-			write(f,"\n")
+			one_liner_tag = length(tag.attributes)<2
+			one_liner_tag ? nothing : write(f,"\n")
 			for attr in tag.attributes
-				writeAttribute(f,attr,tab+1)
+				writeAttribute(f,attr,tab+1,one_liner_tag)
 			end
-			write(f,repeat("\t",tab))
+			one_liner_tag ? nothing : write(f,repeat("\t",tab))
 		end
-		write(f,">\n")
+		one_liner ? write(f,">") : write(f,">\n")
 	else
 		write(f,"</$(tag.name)>\n")
 	end
 end
 
-function writeEmptyTag(f::IOStream,tag::XMLTag,tab::Int=0,_sec=false)
+function writeEmptyTag(f::IOStream,tag::XMLTag,tab::Int=0,one_liner=false,_sec=false)
 	if !_sec
 		write(f,repeat("\t",tab))
 		write(f,"<$(tag.name)")
-		if !isempty(tag.attributes)
+		if !isempty(tag.attributes) && !one_liner
 			write(f,"\n")
 		end
 		for attr in tag.attributes
 			writeAttribute(f,attr,tab+1)
 		end
-		write(f,repeat("\t",tab))
+		one_liner ? nothing : write(f,repeat("\t",tab))
 		write(f,"/>\n")
 	end
 end
@@ -231,17 +232,18 @@ end
 Writes a `XMLElement` to an `IOStream`.
 """
 function writeXMLElement(f::IOStream, el::XMLElement,tab::Int=0)
-	writeTag(f,el.tag,tab)
+	one_liner = length(el.content) < 2 && (length(el.content)==0 || !(typeof(first(el.content))<:AbstractXMLElement) )
+	writeTag(f, el.tag, tab, one_liner)
 	for con in el.content
 		if typeof(con) == XMLElement || typeof(con) == XMLEmptyElement
 			writeXMLElement(f,con,tab+1)
 		else
-			write(f,repeat("\t",tab+1))
+			one_liner ? nothing : write(f,repeat("\t",tab+1))
 			write(f,con)
-			write(f,"\n")
+			one_liner ? nothing : write(f,"\n")
 		end
 	end
-	el.tag.name[1] != '?' ? writeTag(f,el.tag,tab,true) : nothing
+	el.tag.name[1] != '?' ? writeTag(f,el.tag,tab,one_liner,true) : nothing
 end
 
 function writeXMLHeader(f::IOStream, el::XMLHeader)
@@ -254,7 +256,8 @@ end
 Writes a `XMLElement` to an `IOStream`.
 """
 function writeXMLElement(f::IOStream, el::XMLEmptyElement,tab::Int=0)
-	writeEmptyTag(f,el.tag,tab)
+	one_liner = length(el.tag.attributes) < 2
+	writeEmptyTag(f,el.tag,tab,one_liner)
 end
 
 function Base.write(filename::String, xmlfile::XMLFile)
