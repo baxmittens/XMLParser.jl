@@ -218,8 +218,9 @@ function writeEmptyTag(f::IOStream,tag::XMLTag,tab::Int=0,one_liner=false,_sec=f
 		if !isempty(tag.attributes) && !one_liner
 			write(f,"\n")
 		end
+		one_liner_tag = length(tag.attributes)<2
 		for attr in tag.attributes
-			writeAttribute(f,attr,tab+1)
+			writeAttribute(f,attr,tab+1,one_liner_tag)
 		end
 		one_liner ? nothing : write(f,repeat("\t",tab))
 		write(f,"/>\n")
