@@ -8,6 +8,32 @@ mutable struct IOState
 	end
 end
 
+#function tokenizer(line,state)
+#	tagopening = findall("<",line)
+#	tagclosing = findall(">",line)
+#	ntag = length(tagopening)
+#	if length(tagopening) == length(tagclosing)
+#		token = String[]
+#		if ntag <= 1
+#			push!(token,line)
+#			return token
+#		else 
+#			push!(token,line[tagopening[1].start:tagclosing[1].start])
+#			append!(token,tokenizer(line[tagclosing[1].start+1:tagopening[end].start-1],state))
+#			push!(token,line[tagopening[end].start:tagclosing[end].start])
+#			println(token)
+#			return token
+#		end
+#	else
+#		line *= " "*strip(readline(state.f))
+#		if contains(line,"<!--")
+#			return comment_handler(line,state)
+#		else
+#			return tokenizer(line,state)
+#		end
+#	end
+#end
+
 function tokenizer(line,state)
 	tagopening = findall("<",line)
 	tagclosing = findall(">",line)
@@ -16,11 +42,21 @@ function tokenizer(line,state)
 		token = String[]
 		if ntag <= 1
 			push!(token,line)
+			#if length(tagclosing)>0 && tagclosing[end].start<length(line) && !isempty(strip(line[tagclosing[end].start+1:length(line)]))
+			#	push!(token,strip(line[tagclosing[end].start+1:length(line)]))
+			#end
+			#println(token)
 			return token
-		else 
+		else
 			push!(token,line[tagopening[1].start:tagclosing[1].start])
-			append!(token,tokenizer(line[tagclosing[1].start+1:tagopening[end].start-1],state))
-			push!(token,line[tagopening[end].start:tagclosing[end].start])
+			#println("(tagopening[2].start-1)-(tagclosing[1].start+1) = ", (tagopening[2].start-1)-(tagclosing[1].start+1))
+			#println("strip(line[tagclosing[1].start+1:tagopening[2].start-1]) = ", strip(line[tagclosing[1].start+1:tagopening[2].start-1]))
+			#println("line[tagclosing[1].start:tagopening[2].start]) = ", line[tagclosing[1].start:tagopening[2].start])
+			if (tagopening[2].start-1)-(tagclosing[1].start+1)>=0 && !isempty(strip(line[tagclosing[1].start+1:tagopening[2].start-1]))
+				push!(token, strip(line[tagclosing[1].start+1:tagopening[2].start-1]))
+			end
+			append!(token,tokenizer(line[tagopening[2].start:tagclosing[end].start],state))
+			return token
 		end
 	else
 		line *= " "*strip(readline(state.f))
