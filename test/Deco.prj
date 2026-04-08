@@ -1,0 +1,1874 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<OpenGeoSysProject>
+    <meshes>
+        <mesh>Matrix_fracture.vtu</mesh>
+        <mesh>hydraulic_properties_r01.vtu</mesh>
+        <mesh>OuterBounds_TopHigh.vtu</mesh>
+        <mesh>OuterBounds_TopSlope.vtu</mesh>
+        <mesh>OuterBounds_TopLow.vtu</mesh>
+        <mesh>SRC_repo_mesh.vtu</mesh>
+        <!-- <mesh>drifts.vtu</mesh> -->
+    </meshes>
+    <processes>
+        <process>
+            <name>HC</name>
+            <type>ComponentTransport</type>
+            <integration_order>2</integration_order>
+            <coupling_scheme>staggered</coupling_scheme>
+            <process_variables>
+                <!--<process_variable>pressure</process_variable>-->
+                <concentration>Tracer_IRF</concentration>
+                <concentration>Tracer_CR</concentration>
+                <concentration>Tracer_DC</concentration>
+                <concentration>Tracer_SR</concentration>
+                <pressure>pressure</pressure>
+            </process_variables>
+            <!-- <specific_body_force>0 0 -9.81</specific_body_force> -->
+            <specific_body_force>0 0 0</specific_body_force>
+            <secondary_variables>
+                <secondary_variable internal_name="darcy_velocity" output_name="darcy_velocity"/>
+            </secondary_variables>
+            <aperture_size>
+                <parameter>plane_thickness</parameter>
+            </aperture_size>
+            <!--non_advective_form>true</non_advective_form-->
+            <!-- <numerical_stabilization>
+                <type>FullUpwind</type>
+                <cutoff_velocity>1e-8</cutoff_velocity>
+            </numerical_stabilization> -->
+            <numerical_stabilization>
+                <type>IsotropicDiffusion</type>
+                <tuning_parameter>0.25</tuning_parameter>
+                <cutoff_velocity>1.e-8</cutoff_velocity>
+            </numerical_stabilization>
+        </process>
+    </processes>
+    <media>
+        <medium id="0,1">
+            <phases>
+                <phase>
+                    <type>AqueousLiquid</type>
+                    <components>
+                        <component>
+                            <name>Tracer_IRF</name>
+                            <properties>
+                                <property>
+                                    <name>pore_diffusion</name>
+                                    <type>Constant</type>
+                                    <value>5e-4</value>
+                                </property>
+                                <property>
+                                    <name>retardation_factor</name>
+                                    <type>Constant</type>
+                                   
+                                    <value>1</value>
+                                </property>
+                                <property>
+                                    <name>decay_rate</name>
+                                    <type>Constant</type>
+                                    <value>0</value>
+                                </property>
+                            </properties>
+                        </component>
+                        <component>
+                            <name>Tracer_CR</name>
+                            <properties>
+                                <property>
+                                    <name>pore_diffusion</name>
+                                    <type>Constant</type>
+                                    <value>5e-4</value>
+                                </property>
+                                
+                                <property>
+                                    <name>retardation_factor</name>
+                                    <type>Constant</type>
+                                 
+                                    <value>1</value>
+                                </property>
+                                <property>
+                                    <name>decay_rate</name>
+                                    <type>Constant</type>
+                                    <value>0</value>
+                                </property>
+                            </properties>
+                        </component>
+                        <component>
+                            <name>Tracer_DC</name>
+                            <properties>
+                                <property>
+                                    <name>pore_diffusion</name>
+                                    <type>Constant</type>
+                                    <value>5e-4</value>
+                                </property>
+                                <property>
+                                    <name>retardation_factor</name>
+                                    <type>Constant</type>
+                                   
+                                    <value>1</value>
+                                </property>
+                                <property>
+                                    <name>decay_rate</name>
+                                    <type>Constant</type>
+                                    <value>4.41e-08</value>
+                                </property>
+                            </properties>
+                        </component>
+                        <component>
+                            <name>Tracer_SR</name>
+                            <properties>
+                                <property>
+                                    <name>pore_diffusion</name>
+                                    <type>Constant</type>
+                                    <value>5e-4</value>
+                                </property>
+                                <property>
+                                    <name>retardation_factor</name>
+                                    
+                                    <type>Parameter</type>
+                                    <parameter_name>BulkR</parameter_name>
+                                </property>
+                                <property>
+                                    <name>decay_rate</name>
+                                    <type>Constant</type>
+                                    <value>0</value>
+                                </property>
+                            </properties>
+                        </component>
+                    </components>
+                    <properties>
+                        <property>
+                            <name>density</name>
+                            <type>Constant</type>
+                            <value>1e3</value>
+                        </property>
+                        <property>
+                            <name>viscosity</name>
+                            <type>Constant</type>
+                           
+                            <value>3.1709791983764586e-11</value>
+                        </property>
+                    </properties>
+                </phase>
+            </phases>
+            <properties>
+                <property>
+                    <name>permeability</name>
+                    <type>Parameter</type>
+                    <parameter_name>BulkPerm</parameter_name>
+                </property>
+                <property>
+                    <name>porosity</name>
+                    <type>Parameter</type>
+                    <parameter_name>BulkPoro</parameter_name>
+                </property>
+                <property>
+    <name>reference_temperature</name>
+    <type>Constant</type>
+    <value>293.15</value>
+</property>
+<property>
+    <name>storage</name>
+    <type>Constant</type>
+    <value> 0.0 </value>
+</property>
+<property>
+    <name>longitudinal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+<property>
+    <name>transversal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+
+            </properties>
+        </medium>
+        <medium id="2">
+            <phases>
+<phase>
+    <type>AqueousLiquid</type>
+    <components>
+        <component>
+            <name>Tracer_IRF</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <value>0.050457600000000005</value> 
+                </property>
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+       <component>
+        <name>Tracer_CR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    
+                    <value>0.050457600000000005</value>  
+                </property>
+                
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_DC</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                  
+                    <value>0.050457600000000005</value>
+                </property>
+                
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>4.41e-8</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_SR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    
+                    <value>0.050457600000000005</value> 
+                </property>
+                
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+    </components>
+    <properties>
+        <property>
+            <name>density</name>
+            <type>Constant</type>
+            <value>1e3</value>
+        </property>
+        <property>
+            <name>viscosity</name>
+            <type>Constant</type>
+            
+            <value>3.1709791983764586e-11</value>
+            
+        </property>
+    </properties>
+</phase>
+</phases>
+            <properties>
+                <property>
+                    <name>permeability</name>
+                    <type>Constant</type>
+            
+                    <value>6.69778e-4</value>
+                </property>
+                <property>
+                    <name>porosity</name>
+                    <type>Constant</type>
+                    <value>1</value>
+            
+                </property>
+                <property>
+    <name>reference_temperature</name>
+    <type>Constant</type>
+    <value>293.15</value>
+</property>
+<property>
+    <name>storage</name>
+    <type>Constant</type>
+    <value> 0.0 </value>
+</property>
+<property>
+    <name>longitudinal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+<property>
+    <name>transversal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+
+            </properties>
+        </medium>
+        <medium id="3">
+                <phases>
+<phase>
+    <type>AqueousLiquid</type>
+    <components>
+        <component>
+            <name>Tracer_IRF</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                  
+                    <value>0.050457600000000005</value>
+                </property>
+                
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+       <component>
+        <name>Tracer_CR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!-- <value>1.6e-9</value> -->
+                    <value>0.050457600000000005</value>  <!--m^2/year-->
+                </property>
+                <!-- <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property> -->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!-- R = 1+(1-poro)/poro rho_s K_d -->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_DC</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>4.41e-8</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_SR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+    </components>
+    <properties>
+        <property>
+            <name>density</name>
+            <type>Constant</type>
+            <value>1e3</value>
+        </property>
+        <property>
+            <name>viscosity</name>
+            <type>Constant</type>
+            <!--<value>1e-3</value>-->
+            <value>3.1709791983764586e-11</value>       <!-- in Pa*year -->
+            <!-- <value>3.1709791983764586e-17</value>  -->   <!-- in MPa*year -->
+            <!--<value></value>-->
+        </property>
+    </properties>
+</phase>
+</phases>
+            <properties>
+                <property>
+                    <name>permeability</name>
+                    <type>Constant</type>
+                    <!-- <value>3.57188e-10</value> -->
+                    <value>3.57188e-4</value>
+                    <!--value>8.33333333333333e-11</value> <including aperture 1e-3 -->
+                </property>
+                <property>
+                    <name>porosity</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                    <!--value>1e-3</value> <including aperture 1e-3 -->
+                </property>
+                <property>
+    <name>reference_temperature</name>
+    <type>Constant</type>
+    <value>293.15</value>
+</property>
+<property>
+    <name>storage</name>
+    <type>Constant</type>
+    <value> 0.0 </value>
+</property>
+<property>
+    <name>longitudinal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+<property>
+    <name>transversal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+
+            </properties>
+        </medium>
+        <medium id="4"><!-- Fracture-->
+            <phases>
+<phase>
+    <type>AqueousLiquid</type>
+    <components>
+        <component>
+            <name>Tracer_IRF</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+       <component>
+        <name>Tracer_CR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!-- <value>1.6e-9</value> -->
+                    <value>0.050457600000000005</value>  <!--m^2/year-->
+                </property>
+                <!-- <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property> -->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!-- R = 1+(1-poro)/poro rho_s K_d -->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_DC</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>4.41e-8</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_SR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+    </components>
+    <properties>
+        <property>
+            <name>density</name>
+            <type>Constant</type>
+            <value>1e3</value>
+        </property>
+        <property>
+            <name>viscosity</name>
+            <type>Constant</type>
+            <!--<value>1e-3</value>-->
+            <value>3.1709791983764586e-11</value>       <!-- in Pa*year -->
+            <!-- <value>3.1709791983764586e-17</value>  -->   <!-- in MPa*year -->
+            <!--<value></value>-->
+        </property>
+    </properties>
+</phase>
+</phases>
+            <properties>
+                <property>
+                    <name>permeability</name>
+                    <type>Constant</type>
+                    <!-- <value>3.07365e-10</value> -->
+                    <value>3.07365e-4</value>
+                </property>
+                <property>
+                    <name>porosity</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>
+                <property>
+    <name>reference_temperature</name>
+    <type>Constant</type>
+    <value>293.15</value>
+</property>
+<property>
+    <name>storage</name>
+    <type>Constant</type>
+    <value> 0.0 </value>
+</property>
+<property>
+    <name>longitudinal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+<property>
+    <name>transversal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+
+            </properties>
+        </medium>
+        
+        <medium id="5"><!-- Fracture-->
+            <phases>
+                <phases>
+<phase>
+    <type>AqueousLiquid</type>
+    <components>
+        <component>
+            <name>Tracer_IRF</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+       <component>
+        <name>Tracer_CR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!-- <value>1.6e-9</value> -->
+                    <value>0.050457600000000005</value>  <!--m^2/year-->
+                </property>
+                <!-- <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property> -->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!-- R = 1+(1-poro)/poro rho_s K_d -->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_DC</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>4.41e-8</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_SR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+    </components>
+    <properties>
+        <property>
+            <name>density</name>
+            <type>Constant</type>
+            <value>1e3</value>
+        </property>
+        <property>
+            <name>viscosity</name>
+            <type>Constant</type>
+            <!--<value>1e-3</value>-->
+            <value>3.1709791983764586e-11</value>       <!-- in Pa*year -->
+            <!-- <value>3.1709791983764586e-17</value>  -->   <!-- in MPa*year -->
+            <!--<value></value>-->
+        </property>
+    </properties>
+</phase>
+</phases>
+            </phases>
+            <properties>
+                <property>
+                    <name>permeability</name>
+                    <type>Constant</type>
+                    <!-- <value>5.56243e-10</value> -->
+                    <value>5.56243e-4</value>
+                </property>
+                <property>
+                    <name>porosity</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                    <!--value>0.5e-3</value> <including aperture 1e-3 -->
+                </property>
+                <property>
+    <name>reference_temperature</name>
+    <type>Constant</type>
+    <value>293.15</value>
+</property>
+<property>
+    <name>storage</name>
+    <type>Constant</type>
+    <value> 0.0 </value>
+</property>
+<property>
+    <name>longitudinal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+<property>
+    <name>transversal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+
+            </properties>
+        </medium>
+        
+        <medium id="6"><!-- Fracture-->
+            <phases>
+<phase>
+    <type>AqueousLiquid</type>
+    <components>
+        <component>
+            <name>Tracer_IRF</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+       <component>
+        <name>Tracer_CR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!-- <value>1.6e-9</value> -->
+                    <value>0.050457600000000005</value>  <!--m^2/year-->
+                </property>
+                <!-- <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property> -->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!-- R = 1+(1-poro)/poro rho_s K_d -->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_DC</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>4.41e-8</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_SR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+    </components>
+    <properties>
+        <property>
+            <name>density</name>
+            <type>Constant</type>
+            <value>1e3</value>
+        </property>
+        <property>
+            <name>viscosity</name>
+            <type>Constant</type>
+            <!--<value>1e-3</value>-->
+            <value>3.1709791983764586e-11</value>       <!-- in Pa*year -->
+            <!-- <value>3.1709791983764586e-17</value>  -->   <!-- in MPa*year -->
+            <!--<value></value>-->
+        </property>
+    </properties>
+</phase>
+</phases>
+            <properties>
+                <property>
+                    <name>permeability</name>
+                    <type>Constant</type>
+                    <!-- <value>4.67311e-10</value> -->
+                    <value>4.67311e-4</value>
+                </property>
+                <property>
+                    <name>porosity</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                    <!--value>0.5e-3</value> <including aperture 1e-3 -->
+                </property>
+                <property>
+    <name>reference_temperature</name>
+    <type>Constant</type>
+    <value>293.15</value>
+</property>
+<property>
+    <name>storage</name>
+    <type>Constant</type>
+    <value> 0.0 </value>
+</property>
+<property>
+    <name>longitudinal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+<property>
+    <name>transversal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+
+            </properties>
+        </medium>
+        
+        <medium id="7"><!-- Fracture-->
+            <phases>
+<phase>
+    <type>AqueousLiquid</type>
+    <components>
+        <component>
+            <name>Tracer_IRF</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+       <component>
+        <name>Tracer_CR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!-- <value>1.6e-9</value> -->
+                    <value>0.050457600000000005</value>  <!--m^2/year-->
+                </property>
+                <!-- <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property> -->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!-- R = 1+(1-poro)/poro rho_s K_d -->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_DC</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>4.41e-8</value>
+                </property>
+            </properties>
+        </component>
+        <component>
+            <name>Tracer_SR</name>
+            <properties>
+                <property>
+                    <name>pore_diffusion</name>
+                    <type>Constant</type>
+                    <!--<value>1.6e-9</value>-->
+                    <value>0.050457600000000005</value> <!-- m^2/year-->
+                </property>
+                <!--                <property>
+                    <name>molar_volume</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                </property>-->
+                <property>
+                    <name>retardation_factor</name>
+                    <type>Constant</type>
+                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                    <value>1</value>
+                </property>
+                <property>
+                    <name>decay_rate</name>
+                    <type>Constant</type>
+                    <value>0</value>
+                </property>
+            </properties>
+        </component>
+    </components>
+    <properties>
+        <property>
+            <name>density</name>
+            <type>Constant</type>
+            <value>1e3</value>
+        </property>
+        <property>
+            <name>viscosity</name>
+            <type>Constant</type>
+            <!--<value>1e-3</value>-->
+            <value>3.1709791983764586e-11</value>       <!-- in Pa*year -->
+            <!-- <value>3.1709791983764586e-17</value>  -->   <!-- in MPa*year -->
+            <!--<value></value>-->
+        </property>
+    </properties>
+</phase>
+</phases>
+            <properties>
+                <property>
+                    <name>permeability</name>
+                    <type>Constant</type>
+                    <!-- <value>4.71334e-10</value> -->
+                    <value>4.71334e-4</value>
+                </property>
+                <property>
+                    <name>porosity</name>
+                    <type>Constant</type>
+                    <value>1</value>
+                    <!--value>0.5e-3</value> <including aperture 1e-3 -->
+                </property>
+                <property>
+    <name>reference_temperature</name>
+    <type>Constant</type>
+    <value>293.15</value>
+</property>
+<property>
+    <name>storage</name>
+    <type>Constant</type>
+    <value> 0.0 </value>
+</property>
+<property>
+    <name>longitudinal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+<property>
+    <name>transversal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+
+            </properties>
+        </medium>
+
+        <medium id="40"><!-- Drifts-->
+            <phases>
+                <phase>
+                    <type>AqueousLiquid</type>
+                    <components>
+                        <component>
+                            <name>Tracer_IRF</name>
+                            <properties>
+                                <property>
+                                    <name>pore_diffusion</name>
+                                    <type>Constant</type>
+                                    <!-- 1.6e-10/0.46*3600*365.25*24 -->
+                                    <!--<value>1.6e-10</value>-->
+                                    <value>0.010976556521739128</value>
+                                </property>
+                                <!--                <property>
+                                    <name>molar_volume</name>
+                                    <type>Constant</type>
+                                    <value>1</value>
+                                </property>-->
+                                <property>
+                                    <name>retardation_factor</name>
+                                    <type>Constant</type>
+                                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                                    <value>1</value>
+                                </property>
+                                <property>
+                                    <name>decay_rate</name>
+                                    <type>Constant</type>
+                                    <value>0</value>
+                                </property>
+                            </properties>
+                        </component>
+                        <component>
+                            <name>Tracer_CR</name>
+                            <properties>
+                                <property>
+                                    <name>pore_diffusion</name>
+                                    <type>Constant</type>
+                                    <!-- 1.6e-10/0.46*3600*365.25*24 -->
+                                    <!--<value>1.6e-10</value>-->
+                                    <value>0.010976556521739128</value>
+                                </property>
+                                <!-- <property>
+                                    <name>molar_volume</name>
+                                    <type>Constant</type>
+                                    <value>1</value>
+                                </property> -->
+                                <property>
+                                    <name>retardation_factor</name>
+                                    <type>Constant</type>
+                                    <!-- R = 1+(1-poro)/poro rho_s K_d -->
+                                    <value>1</value>
+                                </property>
+                                <property>
+                                    <name>decay_rate</name>
+                                    <type>Constant</type>
+                                    <value>0</value>
+                                </property>
+                            </properties>
+                        </component>
+                        <component>
+                            <name>Tracer_DC</name>
+                            <properties>
+                                <property>
+                                    <name>pore_diffusion</name>
+                                    <type>Constant</type>
+                                    <!-- 1.6e-10/0.46*3600*365.25*24 -->
+                                    <!--<value>1.6e-10</value>-->
+                                    <value>0.010976556521739128</value>
+                                </property>
+                                <!--                <property>
+                                    <name>molar_volume</name>
+                                    <type>Constant</type>
+                                    <value>1</value>
+                                </property>-->
+                                <property>
+                                    <name>retardation_factor</name>
+                                    <type>Constant</type>
+                                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                                    <value>1</value>
+                                </property>
+                                <property>
+                                    <name>decay_rate</name>
+                                    <type>Constant</type>
+                                    <value>4.41e-8</value>
+                                </property>
+                            </properties>
+                        </component>
+                        <component>
+                            <name>Tracer_SR</name>
+                            <properties>
+                                <property>
+                                    <name>pore_diffusion</name>
+                                    <type>Constant</type>
+                                    <!-- 1.6e-10/0.46*3600*365.25*24 -->
+                                    <!--<value>1.6e-10</value>-->
+                                    <value>0.010976556521739128</value>
+                                </property>
+                                <!--                <property>
+                                    <name>molar_volume</name>
+                                    <type>Constant</type>
+                                    <value>1</value>
+                                </property>-->
+                                <property>
+                                    <name>retardation_factor</name>
+                                    <type>Constant</type>
+                                    <!--R = 1+(1-poro)/poro rho_s K_d-->
+                                    <!-- 1+ 1600/0.5462427095740853*7.6E-04 -->
+                                    <value>3.2261166669814885</value>
+                                </property>
+                                <property>
+                                    <name>decay_rate</name>
+                                    <type>Constant</type>
+                                    <value>0</value>
+                                </property>
+                            </properties>
+                        </component>
+                    </components>
+                    <properties>
+                        <property>
+                            <name>density</name>
+                            <type>Constant</type>
+                            <value>1e3</value>
+                        </property>
+                        <property>
+                            <name>viscosity</name>
+                            <type>Constant</type>
+                            <!--<value>1e-3</value>-->
+                            <value>3.1709791983764586e-11</value><!-- in Pa*year-->
+                            <!--<value></value>-->
+                        </property>
+                    </properties>
+                </phase>
+            </phases>
+            <properties>
+                <property>
+                    <name>permeability</name>
+                    <type>Constant</type>
+                    <!-- <value>1.5e-20</value> -->
+                    <value>1.5e-14</value>
+                </property>
+                <property>
+                    <name>porosity</name>
+                    <type>Constant</type>
+                    <!-- <value>0.46</value> -->
+                    <value>0.5462427095740853</value> <!-- including porosity of boreholes-->
+                </property>
+                <property>
+    <name>reference_temperature</name>
+    <type>Constant</type>
+    <value>293.15</value>
+</property>
+<property>
+    <name>storage</name>
+    <type>Constant</type>
+    <value> 0.0 </value>
+</property>
+<property>
+    <name>longitudinal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+<property>
+    <name>transversal_dispersivity</name>
+    <type>Constant</type>
+    <value>0.0</value>
+</property>
+
+            </properties>
+        </medium>
+    </media>
+    <time_loop>
+        <global_process_coupling>
+            <max_iter>1</max_iter>
+                <!-- convergence criterion for the first process (p) -->
+            <convergence_criteria>
+                <convergence_criterion>
+                    <type>DeltaX</type>
+                    <norm_type>NORM2</norm_type>
+                    <reltol>1e-13</reltol>
+                </convergence_criterion>
+                <!-- convergence criterion for Tracer_IRF balance (c) -->
+                <convergence_criterion>
+                    <type>DeltaX</type>
+                    <norm_type>NORM2</norm_type>
+                    <reltol>1e-13</reltol>
+                </convergence_criterion>
+          <!--    convergence criterion for Tracer_CR balance (c) -->
+              <convergence_criterion>
+                    <type>DeltaX</type>
+                    <norm_type>NORM2</norm_type>
+                    <reltol>1e-13</reltol>
+                </convergence_criterion>
+          <!--    convergence criterion for Tracer_DC balance (c) -->
+              <convergence_criterion>
+                    <type>DeltaX</type>
+                    <norm_type>NORM2</norm_type>
+                    <reltol>1e-13</reltol>
+                </convergence_criterion>
+          <!--    convergence criterion for Tracer_SR balance (c) -->
+              <convergence_criterion>
+                    <type>DeltaX</type>
+                    <norm_type>NORM2</norm_type>
+                    <reltol>1e-13</reltol>
+                </convergence_criterion>
+            </convergence_criteria>
+        </global_process_coupling>
+        <processes>
+            <!-- convergence criterion for hydraulic equation -->
+            <process ref="HC">
+                <nonlinear_solver>basic</nonlinear_solver>
+                <convergence_criterion>
+                    <type>DeltaX</type>
+                    <norm_type>NORM2</norm_type>
+                    <reltol>1e-13</reltol>
+                </convergence_criterion>
+                <time_discretization>
+                    <type>BackwardEuler</type>
+                </time_discretization>
+                <time_stepping>
+    <type>FixedTimeStepping</type>
+    <t_initial>0.0</t_initial>
+    <t_end>1</t_end>
+    <timesteps>
+        <pair>
+            <repeat>1</repeat>
+            <delta_t>1</delta_t>
+        </pair>
+    </timesteps>
+</time_stepping>
+            </process>
+            <!-- convergence criterion for component transport equation (Tracer_IRF) -->
+            <process ref="HC">
+                <nonlinear_solver>basic</nonlinear_solver>
+                <convergence_criterion>
+                    <type>DeltaX</type>
+                    <norm_type>NORM2</norm_type>
+                    <reltol>1e-13</reltol>
+                    <!-- <abstol>1e-10</abstol> -->
+                </convergence_criterion>
+                <time_discretization>
+                    <type>BackwardEuler</type>
+                </time_discretization>
+                <time_stepping>
+    <type>FixedTimeStepping</type>
+    <t_initial>0.0</t_initial>
+    <t_end>1</t_end>
+    <timesteps>
+        <pair>
+            <repeat>1</repeat>
+            <delta_t>1</delta_t>
+        </pair>
+    </timesteps>
+</time_stepping>
+            </process>
+            <!-- convergence criterion for component transport equation (Tracer_CR) -->
+           <process ref="HC">
+                <nonlinear_solver>basic</nonlinear_solver>
+                <convergence_criterion>
+                    <type>DeltaX</type>
+                    <norm_type>NORM2</norm_type>
+                    <reltol>1e-13</reltol>
+                    <!-- <abstol>1e-10</abstol> -->
+                </convergence_criterion>
+                <time_discretization>
+                    <type>BackwardEuler</type>
+                </time_discretization>
+                <time_stepping>
+    <type>FixedTimeStepping</type>
+    <t_initial>0.0</t_initial>
+    <t_end>1</t_end>
+    <timesteps>
+        <pair>
+            <repeat>1</repeat>
+            <delta_t>1</delta_t>
+        </pair>
+    </timesteps>
+</time_stepping>
+            </process>
+            <!-- convergence criterion for component transport equation (Tracer_DC) -->
+            <process ref="HC">
+                <nonlinear_solver>basic</nonlinear_solver>
+                <convergence_criterion>
+                    <type>DeltaX</type>
+                    <norm_type>NORM2</norm_type>
+                    <reltol>1e-13</reltol>
+                    <!-- <abstol>1e-10</abstol> -->
+                </convergence_criterion>
+                <time_discretization>
+                    <type>BackwardEuler</type>
+                </time_discretization>
+                <time_stepping>
+    <type>FixedTimeStepping</type>
+    <t_initial>0.0</t_initial>
+    <t_end>1</t_end>
+    <timesteps>
+        <pair>
+            <repeat>1</repeat>
+            <delta_t>1</delta_t>
+        </pair>
+    </timesteps>
+</time_stepping>
+            </process>
+            <!-- convergence criterion for component transport equation (Tracer_SR) -->
+            <process ref="HC">
+                <nonlinear_solver>basic</nonlinear_solver>
+                <convergence_criterion>
+                    <type>DeltaX</type>
+                    <norm_type>NORM2</norm_type>
+                    <reltol>1e-13</reltol>
+                    <!-- <abstol>1e-10</abstol> -->
+                </convergence_criterion>
+                <time_discretization>
+                    <type>BackwardEuler</type>
+                </time_discretization>
+                <time_stepping>
+    <type>FixedTimeStepping</type>
+    <t_initial>0.0</t_initial>
+    <t_end>1</t_end>
+    <timesteps>
+        <pair>
+            <repeat>1</repeat>
+            <delta_t>1</delta_t>
+        </pair>
+    </timesteps>
+</time_stepping>
+            </process>
+        </processes>
+        <output>
+    <type>VTK</type>
+    <prefix>Deco</prefix>
+    <timesteps>
+        <pair>
+            <repeat>1000</repeat>
+            <each_steps>1</each_steps>
+        </pair>
+    </timesteps>
+    <!-- <fixed_output_times>100        125         150         175         200
+        225        250         275         300         325         350        375
+        400        425        450        475        500        525        550
+        575        600        625        650        675        700        725        750
+        775         800        825        850        875        900        925        950        975
+        1000 1033 1066 1100 1150 1200 1250
+        2500 5000 10000 20000 30000 40000 50000
+        60000 70000 80000 90000</fixed_output_times> -->
+    <variables>
+        <variable>pressure</variable>
+        <variable>Tracer_IRF</variable>
+        <variable>Tracer_CR</variable>
+        <variable>Tracer_DC</variable>
+        <variable>Tracer_SR</variable>
+        <variable>LiquidMassFlowRate</variable>
+        <variable>Tracer_IRFFlowRate</variable>
+        <variable>Tracer_CRFlowRate</variable>
+        <variable>Tracer_DCFlowRate</variable>
+        <variable>Tracer_SRFlowRate</variable>
+        <variable>MaterialIDs</variable>
+        <variable>darcy_velocity</variable>
+        <variable>velocity</variable>
+        <variable>porosity_avg</variable>
+        </variables>
+    <suffix>_ts_{:timestep}_t_{:time}</suffix>
+</output>
+    </time_loop>
+    <parameters>
+        <parameter>
+            <name>plane_thickness</name>
+            <type>Group</type>
+            <group_id_property>MaterialIDs</group_id_property>
+            <index_values><index>0</index><value>1</value></index_values>
+            <index_values><index>1</index><value>1</value></index_values>
+            <index_values><index>2</index><value>8.96512e-05</value></index_values>
+            <index_values><index>3</index><value>6.54695e-05</value></index_values>
+            <index_values><index>4</index><value>6.07320e-05</value></index_values>
+            <index_values><index>5</index><value>8.17002e-05</value></index_values>
+            <index_values><index>6</index><value>7.48848e-05</value></index_values>
+            <index_values><index>7</index><value>7.52065e-05</value></index_values>
+            <index_values><index>40</index><value>15</value></index_values><!--approx-->
+        </parameter>
+        <parameter>
+            <name>p0</name>
+            <type>Constant</type>
+            <value>2e-1</value>
+            <!-- <type>Function</type> -->
+            <!-- <expression>1e5+9810*(z-500)</expression> -->
+        </parameter>
+        <parameter>
+            <name>pBC_TopHigh</name>
+            <type>Constant</type>
+            <value>2.962e-1</value>
+        </parameter>
+        <parameter>
+            <name>pBC_TopSlope</name>
+            <type>Function</type>
+            <expression>1.981e-1-.981e-1*sin((x-200)/2e3*pi)</expression>
+        </parameter>
+        <parameter>
+            <name>pBC_TopLow</name>
+            <type>Constant</type>
+            <value>1e-1</value>
+        </parameter>
+        <parameter>
+            <name>BulkPerm</name>
+<!--            <type>Constant</type>
+            <value>5e-17</value>-->
+            <type>MeshElement</type>
+            <mesh>hydraulic_properties_r01</mesh>
+            <field_name>TotalOda_K</field_name>
+            <!-- <field_name>TotalOda_K</field_name>  -->
+        </parameter>
+        <parameter>
+            <name>BulkPoro</name>
+           <!--<type>Constant</type>
+            <value>5e-6</value>-->
+            <type>MeshElement</type>
+            <mesh>hydraulic_properties_r01</mesh>
+            <field_name>Poro</field_name>
+        </parameter>
+        <parameter>
+            <name>BulkR</name>
+           <!--<type>Constant</type>
+            <value>5e-6</value>-->
+            <type>MeshElement</type>
+            <mesh>hydraulic_properties_r01</mesh>
+            <field_name>R_rock</field_name>
+        </parameter>
+        <parameter>
+            <name>c0</name>
+            <type>Constant</type>
+            <value>0.0</value>
+        </parameter>
+        <!-- <parameter>
+            <name>Tracer_IRF_in_scaler</name>
+            <type>Constant</type> -->
+            <!--<value>1.0</value>-->
+            <!-- 0.545g/Pkg / 128.9g/mole m-->
+            <!-- <value>0.004228083785880527</value>
+        </parameter> -->
+        <parameter>
+            <name>Tracer_IRF_in</name>
+            <type>Function</type>
+            <expression>0.545/128/sqrt(2*pi)/0.15*exp(-0.5*((t-0.5)/0.15)^2)</expression>
+            <!-- <type>CurveScaled</type>
+            <parameter>Tracer_IRF_in_scaler</parameter>
+            <curve>initial_pulse</curve> -->
+        </parameter>
+        <!-- <parameter>
+            <name>Tracer_CR_in_scaler</name>
+            <type>Constant</type> -->
+            <!--<value>1.0</value>-->
+            <!-- 4.9g/Pkg / 128.9g/mole -->
+            <!-- <value>0.03801396431342126</value>
+        </parameter> -->
+        <parameter>
+            <name>Tracer_CR_in</name>
+            <type>Constant</type>
+            <!--<value>1.0</value>-->
+            <!-- 4.9g/Pkg / 128.9g/mole -->
+            <value>0.03801396431342126e-7</value>
+            <!-- <type>CurveScaled</type>
+            <parameter>Tracer_CR_in_scaler</parameter>
+            <curve>fractional_release</curve> -->
+        </parameter>
+    </parameters>
+    <!-- <curves>
+        <curve>
+            <name>initial_pulse</name>
+            <coords>0 1e100</coords>
+            <values>1.0 1.0</values>
+        </curve>
+    </curves> -->
+    <process_variables>
+        <process_variable>
+            <name>pressure</name>
+            <components>1</components>
+            <order>1</order>
+            <initial_condition>p0</initial_condition>
+            <boundary_conditions>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopHigh</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>pBC_TopHigh</parameter>
+                </boundary_condition>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopSlope</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>pBC_TopSlope</parameter>
+                </boundary_condition>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopLow</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>pBC_TopLow</parameter>
+                </boundary_condition>
+            </boundary_conditions>
+        </process_variable>
+        <process_variable>
+            <name>Tracer_IRF</name>
+            <components>1</components>
+            <order>1</order>
+            <initial_condition>c0</initial_condition>
+            <boundary_conditions>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopHigh</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopSlope</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopLow</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+            </boundary_conditions>
+            <source_terms>
+                <source_term>
+                    <mesh>SRC_repo_mesh</mesh>
+                    <type>Nodal</type>
+                    <component>0</component>
+                    <parameter>Tracer_IRF_in</parameter>
+                </source_term>
+            </source_terms>
+        </process_variable>
+        <process_variable>
+            <name>Tracer_CR</name>
+            <components>1</components>
+            <order>1</order>
+            <initial_condition>c0</initial_condition>
+            <boundary_conditions>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopHigh</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopSlope</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopLow</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+            </boundary_conditions>
+            <source_terms>
+                <source_term>
+                    <mesh>SRC_repo_mesh</mesh>
+                    <type>Nodal</type>
+                    <component>0</component>
+                    <parameter>Tracer_CR_in</parameter>
+                </source_term>
+            </source_terms>
+        </process_variable>
+        <process_variable>
+            <name>Tracer_DC</name>
+            <components>1</components>
+            <order>1</order>
+            <initial_condition>c0</initial_condition>
+            <boundary_conditions>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopHigh</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopSlope</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopLow</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+            </boundary_conditions>
+            <source_terms>
+                <source_term>
+                    <mesh>SRC_repo_mesh</mesh>
+                    <type>Nodal</type>
+                    <component>0</component>
+                    <parameter>Tracer_IRF_in</parameter>
+                </source_term>
+            </source_terms>
+        </process_variable>
+        <process_variable>
+            <name>Tracer_SR</name>
+            <components>1</components>
+            <order>1</order>
+            <initial_condition>c0</initial_condition>
+            <boundary_conditions>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopHigh</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopSlope</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+                <boundary_condition>
+                    <mesh>OuterBounds_TopLow</mesh>
+                    <type>Dirichlet</type>
+                    <parameter>c0</parameter>
+                </boundary_condition>
+            </boundary_conditions>
+            <source_terms>
+                <source_term>
+                    <mesh>SRC_repo_mesh</mesh>
+                    <type>Nodal</type>
+                    <component>0</component>
+                    <parameter>Tracer_IRF_in</parameter>
+                </source_term>
+            </source_terms>
+        </process_variable>
+    </process_variables>
+    <nonlinear_solvers>
+        <nonlinear_solver>
+            <name>basic</name>
+            <type>Newton</type>
+            <max_iter>20</max_iter>
+            <linear_solver>general_linear_solver</linear_solver>
+        </nonlinear_solver>
+        <nonlinear_solver>
+            <name>basicH</name>
+            <type>Newton</type>
+            <max_iter>10</max_iter>
+            <linear_solver>general_linear_solver</linear_solver>
+        </nonlinear_solver>
+        <nonlinear_solver>
+            <name>basicC</name>
+            <type>Newton</type>
+            <max_iter>20</max_iter>
+            <linear_solver>C1_linear_solver</linear_solver>
+        </nonlinear_solver>
+    </nonlinear_solvers>
+    <linear_solvers>
+        <linear_solver>
+            <name>general_linear_solver</name>
+            <lis>-i bicgstab -p ilut -tol 1e-14 -maxiter 1000</lis>
+            <eigen>
+                <!--this one is used in the default ogs compilation -->
+                <solver_type>BiCGSTAB</solver_type>
+                <precon_type>ILUT</precon_type>
+                <max_iteration_step>1000</max_iteration_step>
+                <error_tolerance>1e-21</error_tolerance>
+            </eigen>
+            <petsc>
+                <prefix>hc</prefix>
+                <parameters>-hc_ksp_type gmres
+                    -hc_ksp_gmres_restart 100
+                    -hc_ksp_gmres_modifiedgramschmidt
+                    -hc_pc_type hypre -hc_pc_hypre_type boomeramg
+                    -hc_pc_hypre_boomeramg_relax_type_all SOR/Jacobi
+                    -hc_pc_hypre_boomeramg_max_iter 2
+                    -hc_ksp_rtol 1e-14 -hc_ksp_max_it 100
+                    -hc_ksp_view
+                    -hc_ksp_monitor
+                </parameters>
+                <!-- -hc_pc_type hypre -hc_pc_hypre_type pilut -hc_pc_hypre_pilut_FactorRowSize 500 -hc_pc_hypre_pilut_DropTolerance 0.0-->
+                <!--<parameters> -hc_mat_type aij -hc_pc_type lu -hc_pc_factor_mat_solver_type mumps -hc_ksp_view</parameters>-->
+            </petsc>
+        </linear_solver>
+        <linear_solver>
+            <name>C1_linear_solver</name>
+            <lis>-i bicgstab -p ilut -tol 1e-14 -maxiter 1000</lis>
+            <eigen>
+                <!--this one is used in the default ogs compilation -->
+                <!-- <solver_type>BiCGSTAB</solver_type>
+                <precon_type>ILUT</precon_type>
+                <max_iteration_step>1000</max_iteration_step>
+                <error_tolerance>1e-21</error_tolerance> -->
+                <solver_type>PardisoLU</solver_type>
+            </eigen>
+            <petsc>
+                <prefix>hc</prefix>
+                <parameters>-hc_ksp_type gmres
+                    -hc_ksp_gmres_restart 100
+                    -hc_ksp_gmres_modifiedgramschmidt
+                    -hc_pc_type hypre -hc_pc_hypre_type boomeramg
+                    -hc_pc_hypre_boomeramg_relax_type_all SOR/Jacobi
+                    -hc_pc_hypre_boomeramg_max_iter 2
+                    -hc_ksp_rtol 1e-14 -hc_ksp_max_it 100
+                    -hc_ksp_view
+                    -hc_ksp_monitor
+                </parameters>
+                <!-- -hc_pc_type hypre -hc_pc_hypre_type pilut -hc_pc_hypre_pilut_FactorRowSize 500 -hc_pc_hypre_pilut_DropTolerance 0.0-->
+                <!--<parameters> -hc_mat_type aij -hc_pc_type lu -hc_pc_factor_mat_solver_type mumps -hc_ksp_view</parameters>-->
+            </petsc>
+        </linear_solver>
+        <linear_solver>
+            <name>H_linear_solver</name>
+            <eigen>
+                <solver_type>PardisoLU</solver_type>
+            </eigen>
+        </linear_solver>
+    </linear_solvers>
+</OpenGeoSysProject>
