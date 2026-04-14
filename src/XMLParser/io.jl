@@ -41,17 +41,18 @@ function tokenizer(line,state)
 	if length(tagopening) == length(tagclosing)
 		token = String[]
 		if ntag <= 1
-			push!(token,line)
-			#if length(tagclosing)>0 && tagclosing[end].start<length(line) && !isempty(strip(line[tagclosing[end].start+1:length(line)]))
-			#	push!(token,strip(line[tagclosing[end].start+1:length(line)]))
-			#end
-			#println(token)
+			if length(tagclosing) == 1 && tagclosing[end].start < length(line)
+				push!(token,line[1:tagclosing[end].start])
+				surp = line[tagclosing[end].start+1:end]
+				if !isempty(surp)
+					push!(token,surp)
+				end
+			else
+				push!(token,line)
+			end
 			return token
 		else
 			push!(token,line[tagopening[1].start:tagclosing[1].start])
-			#println("(tagopening[2].start-1)-(tagclosing[1].start+1) = ", (tagopening[2].start-1)-(tagclosing[1].start+1))
-			#println("strip(line[tagclosing[1].start+1:tagopening[2].start-1]) = ", strip(line[tagclosing[1].start+1:tagopening[2].start-1]))
-			#println("line[tagclosing[1].start:tagopening[2].start]) = ", line[tagclosing[1].start:tagopening[2].start])
 			if (tagopening[2].start-1)-(tagclosing[1].start+1)>=0 && !isempty(strip(line[tagclosing[1].start+1:tagopening[2].start-1]))
 				push!(token, strip(line[tagclosing[1].start+1:tagopening[2].start-1]))
 			end
